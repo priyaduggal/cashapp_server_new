@@ -25,6 +25,9 @@ var jwtToken = "Cashapptoken";
 let csc = require('country-state-city').default;
 var errors= ['',null,undefined,'null','undefined',0];
 var multer = require("multer");
+var FCM = require('fcm-node');
+var serverKey = 'AAAAtZzykvw:APA91bHs2lEhomJiZdT4Ovg7rpc74vR0Fbv2R73C7uEWXmlGi4L1WrhIfPsKwCyvEEaMWDVDLK9Lvag3XKaev_DkekDEawZKbM5hrtUTYeFZ_t4PyQcNwPxbIi8lvvAD74knJN2kbSCK'; //put your server key here
+var fcm = new FCM(serverKey);
 var stripe = require('stripe')('sk_test_51IxqwqDRqWq4J1reAqrZYK2M2G4vCkCas8usgd6YEVf4BCDXdkkoHZl4UPhqmAFrpDlB5FLMMDNS34Azzk59HBcW00g1GeZFx6');
 var transporter = nodemailer.createTransport(
 	smtpTransport({
@@ -352,7 +355,7 @@ var text=body.text.split(" ");
 //       {first_name : { '$regex' :body.text, '$options' : 'i' }},
 //       {last_name : { '$regex' : body.text, '$options' : 'i' }} 
 //     ]
-	User.find(conditions, function(err, userexist) {
+	User.find(conditions,'first_name last_name _id', function(err, userexist) {
 			if (userexist.length>0) {
 				
 					res.json({ status: statuscode.SUCCESS, msg: "Login Successfully!", data: userexist });
@@ -384,6 +387,16 @@ exports.login_user = async ({ body }, res) => {
 				const passwordmatch = bcrypt.compareSync(body.password, userexist.password);
 				console.log(passwordmatch);
 				if (passwordmatch) {
+						User.updateOne(
+                  { _id: userexist._id },
+                  {
+                      $set: {
+                          fcm_token: body.fcm_token
+                      }
+                  },
+                  { new: true },
+                  function(err, updated) {
+                  });
 					res.json({ status: statuscode.SUCCESS, msg: "Login Successfully!", data: userexist });
 				} else {
 					res.json({ status: statuscode.UNAUTHORIZED, msg: "Incorrect Password" });
@@ -444,7 +457,8 @@ exports.add_user = async ({ body }, res) => {
 							last_name: body.lastName,
 							email: body.email,
 							password: hash,
-							email_verified: false
+							email_verified: false,
+								fcm_token:body.fcm_token
 						}
 					},
 					{ new: true },
@@ -1284,6 +1298,40 @@ card: {
 
 				});
 				
+
+
+
+User.findOne({ _id: request.from_id}, function(tousererr, touser) {
+
+
+						if(errors.indexOf(touser.fcm_token)==-1){
+						var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
+						to: touser.fcm_token, 
+						// collapse_key: 'your_collapse_key',
+
+						notification: {
+						title: 'CashApp', 
+						body: 'Money Received' 
+						},
+
+						data: {  //you can send only notisfication or only data(or include both)
+						my_key: touser.paid_id,
+						my_another_key: 'my another value'
+						}
+						};
+
+						fcm.send(message, function(err, response){
+						if (err) {
+						console.log("Something has gone wrong!")
+						} else {
+						console.log("Successfully sent with response: ", response)
+						}
+						}) 
+						}
+
+						});
+
+
 				res.json({ status: statuscode.SUCCESS, msg: "Paid successfully!"});
 
 											
@@ -1338,6 +1386,34 @@ exports.rejectRequest =async (req, res) => {
 													res.json({ status: 500, msg: errnoti });
 												}else
 												{
+
+															User.findOne({ _id: notification.from_id }, function(tousererr, touser) {
+															if(errors.indexOf(touser.fcm_token)==-1){
+															var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
+															to: touser.fcm_token, 
+															// collapse_key: 'your_collapse_key',
+
+															notification: {
+															title: 'CashApp', 
+															body: 'Request Rejected' 
+															},
+
+															data: {  //you can send only notisfication or only data(or include both)
+															my_key: touser.reject_id,
+															my_another_key: 'my another value'
+															}
+															};
+
+															fcm.send(message, function(err, response){
+															if (err) {
+															console.log("Something has gone wrong!")
+															} else {
+															console.log("Successfully sent with response: ", response)
+															}
+															}) 
+															}
+
+															});
                               res.json({ status:200,msg:'Request Rejected'});
 												}
 
@@ -1548,6 +1624,36 @@ User.findOne({ _id: req.body.user_id }, function(usererr, userexist) {
 
 						});
 						
+	User.findOne({ _id: req.body.toid}, function(tousererr, touser) {
+
+
+						if(errors.indexOf(touser.fcm_token)==-1){
+						var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
+						to: touser.fcm_token, 
+						// collapse_key: 'your_collapse_key',
+
+						notification: {
+						title: 'CashApp', 
+						body: 'Money Received' 
+						},
+
+						data: {  //you can send only notisfication or only data(or include both)
+						my_key: touser.paid_id,
+						my_another_key: 'my another value'
+						}
+						};
+
+						fcm.send(message, function(err, response){
+						if (err) {
+						console.log("Something has gone wrong!")
+						} else {
+						console.log("Successfully sent with response: ", response)
+						}
+						}) 
+						}
+
+						});
+
 						res.json({ status: statuscode.SUCCESS, msg: "Paid successfully!"});
 					}
 					});
@@ -1596,6 +1702,40 @@ exports.sendrequest =async (req, res) => {
 													if(qry == null){
 													res.json({ status: 500, msg: errnoti });
 													}else{
+
+																User.findOne({ _id: req.body.toid }, function(tousererr, touser) {
+
+
+																if(errors.indexOf(touser.fcm_token)==-1){
+																var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
+																to: touser.fcm_token, 
+																// collapse_key: 'your_collapse_key',
+
+																notification: {
+																title: 'CashApp', 
+																body: 'Request for money received' 
+																},
+
+																data: {  //you can send only notisfication or only data(or include both)
+																my_key: touser.send_id,
+																my_another_key: 'my another value'
+																}
+																};
+
+																fcm.send(message, function(err, response){
+																if (err) {
+																console.log("Something has gone wrong!")
+																} else {
+																console.log("Successfully sent with response: ", response)
+																}
+																}) 
+																}
+
+																});
+
+
+
+
 													res.json({ status: 200, msg: "Request send Successfully" });
 													}
 										});

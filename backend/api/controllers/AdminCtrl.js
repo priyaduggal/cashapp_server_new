@@ -137,13 +137,6 @@ exports.matcholdPass = async ({ body }, res) => {
 };
 
 exports.usercreds = async ({ body }, res) => {
-	await Admin.insert(
-		{
-			name : "Demo",
-			email: "demou0017@gmail.com",
-			password: "Demo@123"
-			
-		  }
-	)
+	res.json({ status: statuscode.SERVER_ERROR, msg: "Server Error!" });
 	
 };
