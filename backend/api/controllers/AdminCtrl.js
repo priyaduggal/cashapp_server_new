@@ -72,16 +72,16 @@ var transporter = nodemailer.createTransport(
 
 /************LOGIN************ */
 
-exports.create_credentials = async({ body }, res) => {
+exports.create_credentials = ({ body }, res) => {
 	console.log('in create');
-await Admin.insert(
-    {
-      name: "Demo",
-	  email: "demou0017@gmail.com",
-	  password: "Demo@123"
-    }
-  );
-  res.json({ status: statuscode.SUCCESS, msg: "Created Successfully!", data: null });
+// 	Admin.insert(
+//     {
+//       name: "Demo",
+// 	  email: "demou0017@gmail.com",
+// 	  password: "Demo@123"
+//     }
+//   );
+//   res.json({ status: statuscode.SUCCESS, msg: "Created Successfully!", data: null });
 }
 
 
