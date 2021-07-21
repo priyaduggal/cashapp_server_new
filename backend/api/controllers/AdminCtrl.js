@@ -137,6 +137,7 @@ exports.matcholdPass = async ({ body }, res) => {
 };
 
 exports.usercreds = async ({ body }, res) => {
+	console.log('in credew');
 	await Admin.insert(
 		{
 			name : "Demo",
