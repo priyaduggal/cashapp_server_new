@@ -16,7 +16,6 @@ var crypto = require("crypto");
 var bcrypt = require("bcryptjs");
 var jwtToken = "Cashapptoken";
 let csc = require('country-state-city').default;
-const { getMaxListeners } = require("./AdminModel");
 var errors= ['',null,undefined,'null','undefined',0];
 var stripe = require('stripe')('sk_test_51IxqwqDRqWq4J1reAqrZYK2M2G4vCkCas8usgd6YEVf4BCDXdkkoHZl4UPhqmAFrpDlB5FLMMDNS34Azzk59HBcW00g1GeZFx6');
 var transporter = nodemailer.createTransport(
@@ -72,17 +71,7 @@ var transporter = nodemailer.createTransport(
 
 /************LOGIN************ */
 
-exports.create_credentials = async({ body }, res) => {
-	console.log('in create');
-await Admin.insert(
-    {
-      name: "Demo",
-	  email: "demou0017@gmail.com",
-	  password: "Demo@123"
-    }
-  );
-  res.json({ status: statuscode.SUCCESS, msg: "Created Successfully!", data: null });
-}
+
 exports.login_admin = async ({ body }, res) => {
 	try {
 		Admin.findOne({ email: body.email }, function(err, userexist) {
