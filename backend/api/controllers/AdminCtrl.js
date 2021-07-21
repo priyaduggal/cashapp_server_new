@@ -135,8 +135,8 @@ exports.matcholdPass = async ({ body }, res) => {
 	}
 };
 
-exports.create_cred = ({ body }, res) => {
-	console.log('in create');
+// exports.create_cred = ({ body }, res) => {
+// 	console.log('in create');
 // 	Admin.insert(
 //     {
 //       name: "Demo",
@@ -145,5 +145,5 @@ exports.create_cred = ({ body }, res) => {
 //     }
 //   );
 //   res.json({ status: statuscode.SUCCESS, msg: "Created Successfully!", data: null });
-};
+// };
 
