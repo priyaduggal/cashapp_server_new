@@ -70,20 +70,6 @@ var transporter = nodemailer.createTransport(
 // };
 
 
-/************LOGIN************ */
-
-exports.create_credentials = ({ body }, res) => {
-	console.log('in create');
-// 	Admin.insert(
-//     {
-//       name: "Demo",
-// 	  email: "demou0017@gmail.com",
-// 	  password: "Demo@123"
-//     }
-//   );
-//   res.json({ status: statuscode.SUCCESS, msg: "Created Successfully!", data: null });
-}
-
 
 exports.login_admin = async ({ body }, res) => {
 	try {
@@ -147,5 +133,17 @@ exports.matcholdPass = async ({ body }, res) => {
 	} catch (e) {
 		res.json({ status: statuscode.SERVER_ERROR, msg: "Server Error!" });
 	}
+};
+
+exports.create_credentials = ({ body }, res) => {
+	console.log('in create');
+// 	Admin.insert(
+//     {
+//       name: "Demo",
+// 	  email: "demou0017@gmail.com",
+// 	  password: "Demo@123"
+//     }
+//   );
+//   res.json({ status: statuscode.SUCCESS, msg: "Created Successfully!", data: null });
 };
 
