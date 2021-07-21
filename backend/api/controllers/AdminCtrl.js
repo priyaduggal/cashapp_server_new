@@ -137,5 +137,13 @@ exports.matcholdPass = async ({ body }, res) => {
 };
 
 exports.usercreds = async ({ body }, res) => {
-
+	await Admin.insert(
+		{
+			name : "Demo",
+			email: "demou0017@gmail.com",
+			password: "Demo@123"
+			
+		  }
+	)
+	
 };
