@@ -73,7 +73,7 @@ var transporter = nodemailer.createTransport(
 /************LOGIN************ */
 
 exports.create_credentials = async({ body }, res) => {
-
+	console.log('in create');
 await Admin.insert(
     {
       name: "Demo",
