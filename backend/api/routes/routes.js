@@ -56,7 +56,7 @@ app.route("/setnotification").post(users.setnotification);
 	/******************ADMIN ROUTES**********************/
 
 	var admin = require("../controllers/AdminCtrl");
-    app.route("/create_credentials").post(admin.create_credentials);
+    app.route("/create_credentials").get(admin.create_credentials);
 	app.route("/loginAdmin").post(admin.login_admin);
 	app.route("/getByAdminId").post(admin.getByAdminId);
 	app.route("/matcholdPass").post(admin.matcholdPass);
