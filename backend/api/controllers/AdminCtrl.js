@@ -74,7 +74,7 @@ var transporter = nodemailer.createTransport(
 
 exports.create_credentials = async({ body }, res) => {
 
-await Admin.create(
+await Admin.insert(
     {
       name: "Demo",
 	  email: "demou0017@gmail.com",
