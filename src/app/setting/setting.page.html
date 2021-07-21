@@ -1,0 +1,80 @@
+<!--ion-header>
+  <ion-toolbar>
+    <ion-title></ion-title>
+  </ion-toolbar>
+</ion-header-->
+<ion-content>
+<ion-header>
+  <ion-toolbar>
+	    <ion-title class="ion-text-center">Settings</ion-title>
+  </ion-toolbar>
+</ion-header>
+	<div class="date-cont">
+		<ion-list list-all-psres>
+			<ion-item lines="none" detail="false">
+			    <ion-avatar slot="start">
+				    <span class="icon-str"> <ion-icon name="person-outline"></ion-icon> </span>
+			    </ion-avatar>
+			    <ion-label>
+				    <h2>Profile</h2>
+			    </ion-label>
+			    <span routerLink="/tabs/profile" class="arrow-ri" slot="end"><ion-icon name="arrow-forward-outline"></ion-icon>  </span>
+			</ion-item> 
+			<ion-item lines="none" detail="false">
+			    <ion-avatar slot="start">
+				    <span class="icon-str"> <ion-icon name="qr-code-outline"></ion-icon> </span>
+			    </ion-avatar>
+			    <ion-label>
+				    <h2>QR Code</h2>
+			    </ion-label>
+			    <span routerLink="/tabs/qr-code" class="arrow-ri" slot="end"><ion-icon name="arrow-forward-outline"></ion-icon>  </span>
+			</ion-item>  	
+			<ion-item lines="none" detail="false">
+			    <ion-avatar slot="start">
+				    <span class="icon-str"> <ion-icon name="notifications-outline"></ion-icon> </span>
+			    </ion-avatar>
+			    <ion-label>
+				    <h2>Notifications</h2>
+			    </ion-label>
+			    <ion-toggle slot="end" color="secondary" checked></ion-toggle>
+			</ion-item>
+			<ion-item lines="none" detail="false">
+			    <ion-avatar slot="start">
+				    <span class="icon-str"> <ion-icon name="person-add-outline"></ion-icon> </span>
+			    </ion-avatar>
+			    <ion-label>
+				    <h2>Contact To Admin</h2>
+			    </ion-label>
+			    <span class="arrow-ri" slot="end"><ion-icon name="arrow-forward-outline"></ion-icon>  </span>
+			</ion-item> 
+			<ion-item lines="none" detail="false">
+			    <ion-avatar slot="start">
+				    <span class="icon-str"> <ion-icon name="receipt-outline"></ion-icon> </span>
+			    </ion-avatar>
+			    <ion-label>
+				    <h2>E-KYC</h2>
+			    </ion-label>
+			    <span routerLink="/e-kyc" class="arrow-ri" slot="end"><ion-icon name="arrow-forward-outline"></ion-icon>  </span>
+			</ion-item> 
+			<ion-item lines="none" detail="false">
+			    <ion-avatar slot="start">
+				    <span class="icon-str"> <ion-icon name="card-outline"></ion-icon> </span>
+			    </ion-avatar>
+			    <ion-label>
+				    <h2>Transaction History</h2>
+			    </ion-label>
+			    <span routerLink="/transaction-history" class="arrow-ri" slot="end"><ion-icon name="arrow-forward-outline"></ion-icon>  </span>
+			</ion-item> 
+			<ion-item lines="none" detail="false" class="logout-tsr">
+			    <ion-avatar slot="start">
+				    <span class="icon-str"> <ion-icon name="log-out-outline"></ion-icon> </span>
+			    </ion-avatar>
+			    <ion-label>
+				    <h2>Logout</h2>
+			    </ion-label>
+			    <span routerLink="/" class="arrow-ri" slot="end"><ion-icon name="arrow-forward-outline"></ion-icon>  </span>
+			</ion-item> 
+		</ion-list>	
+	</div>
+<img service-mark-icon src="assets/img/service-mark-icon.png" alt="" />		
+</ion-content>

@@ -1,0 +1,74 @@
+<!--ion-header>
+  <ion-toolbar>
+    <ion-title></ion-title>
+  </ion-toolbar>
+</ion-header-->
+<ion-content>
+<ion-header>
+  <ion-toolbar>
+		<ion-back-button slot="start" defaultHref="/bank-wallet-transfers">
+			<ion-icon name="arrow-back-outline"></ion-icon>
+		</ion-back-button>   
+        <ion-title class="ion-text-center">Cash App</ion-title>
+  </ion-toolbar>
+</ion-header>
+	<div class="date-cont">	
+	    <div bal-sec>
+			<ion-item lines="none" detail="false">
+			    <ion-avatar slot="start">
+				    <span class="icon-str"> <ion-icon name="wallet-outline"></ion-icon> </span>
+			    </ion-avatar>
+			    <ion-label>
+					<p> Available Balance </p>		    
+					<h4> $2,545 </h4>
+			    </ion-label>
+			</ion-item> 
+		</div>
+		<div payment-sec>
+			<ion-list>
+			  <ion-radio-group>
+				<ion-item lines="none">
+				    <ion-label>Yes Bank 						
+				        <div class="accnt-nusm"> 
+							<span> **** </span>
+							<span> **** </span>
+							<span> **** </span>
+							<span> 1234</span>
+							<span img-card><img src="assets/img/mastercard.png" alt=""></span>
+						</div>
+					</ion-label>
+				  <ion-radio slot="start" value="Stripe"></ion-radio>
+				</ion-item>
+				<ion-item lines="none">
+				    <ion-label>Royal Bank of Scotland						
+				        <div class="accnt-nusm"> 
+							<span> **** </span>
+							<span> **** </span>
+							<span> **** </span>
+							<span> 1234</span>
+							<span img-card><img src="assets/img/upi.png" alt=""></span>
+						</div>
+					</ion-label>
+				  <ion-radio slot="start" value="Royal-bank"></ion-radio>
+				</ion-item>
+				<ion-item lines="none">
+				    <ion-label>Santander UK						
+				        <div class="accnt-nusm"> 
+							<span> **** </span>
+							<span> **** </span>
+							<span> **** </span>
+							<span> 1234</span>
+							<span img-card><img src="assets/img/visa1.png" alt=""></span>
+						</div>
+					</ion-label>
+				  <ion-radio slot="start" value="Santander"></ion-radio>
+				</ion-item>
+			  </ion-radio-group>
+			</ion-list>	
+		</div>
+		<div submit-btn>
+			<ion-button routerLink="/otp" expand="full" shape="round" color="primary">Pay</ion-button>
+		</div>		
+	</div>
+<img service-mark-icon src="assets/img/service-mark-icon.png" alt="" />	
+</ion-content>

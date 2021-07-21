@@ -1,0 +1,214 @@
+ion-content {
+    --background: var(--ion-color-white);
+	ion-header
+	{
+	    position: relative;
+        &:after
+        {
+		    display:none;
+		}		
+		ion-toolbar
+		{
+			--background: #ececec;
+			padding: 20px 10px 50px;
+			color: #292929;
+			--min-height: 28px;
+			position: relative;
+			z-index: 0;
+			ion-back-button
+			{
+				color: #292929;
+				font-size:20px;
+			}
+			ion-title
+			{
+				font-size: 18px;
+			}
+			&:after {
+				/* content:"";
+				background: url("../../assets/img/profile-bg.jpg");
+				position: absolute;
+				left: 0;
+				right: 0;
+				top: 0;
+				bottom: 0;
+				background-size: cover;
+				background-position: center;
+				opacity: 0.1; */
+			}
+		}
+	}
+	.date-cont 
+	{
+		position: relative;
+		z-index:11;
+		padding: 30px 20px 40px;
+		border-radius: 25px 25px 0px 0px;
+		margin-top: -30px;
+		background: var(--ion-color-white);	
+		.box-crdits 
+		{
+			background: var(--ion-color-gradient2);
+			width: 100%;
+			padding: 25px;
+			position: relative;
+			z-index: 1;
+			overflow: hidden;				
+			margin-bottom: 25px;
+			border-radius: 12px;
+			box-shadow: 1px 4px 10px rgba(0, 0, 0, 0.07);
+			margin-top: 0px;
+			.top-cips 
+			{
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+			    margin-bottom: 15px;
+				img.chip-s 
+				{
+					height: 35px;
+				}				
+				img.visa-s 
+				{
+					height: 20px;
+				}
+			}
+			.accnt-nusm 
+			{
+				color: var(--ion-color-white);
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				margin: 20px 0px;
+				letter-spacing: 4px;
+				font-size: 14px;
+				font-weight: 500;
+			}
+			.tst-lta 
+			{
+				color: var(--ion-color-white);
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				text-align: initial;				
+				p {
+					font-size: 10px;
+					text-transform: uppercase;
+					letter-spacing: 1px;
+					margin: 0px;
+					span {
+						display: block;
+						font-size: 14px;
+						font-weight: 500;
+						letter-spacing: 2px;
+					}
+				}
+			}	
+			[credit-logo] 
+			{
+				position: absolute;
+				top: 0px;
+				bottom: 0px;
+				left: 0px;
+				right: 0px;
+				margin: auto;
+				width: 130px;
+				z-index: -1;
+				opacity: 1;
+			}
+			&:before 
+			{
+				position: absolute;
+				content: "";
+				top: 0px;
+				bottom: 0px;
+				left: 0px;
+				right: 0px;
+				background: url(../../assets/img/credit-card-pattern.png) no-repeat center center/cover;
+				opacity: 0.08;
+				z-index:-1;
+			}			
+		}	
+		[card-detail]
+		{
+		    padding: 0px 5px 25px;
+			h3 
+			{
+				margin: 0px;
+				font-size: 18px;
+				font-weight: 600;
+				color: #222;
+			    letter-spacing: 1px;	
+			}
+			p 
+			{
+				margin: 10px 0px 0px;
+				font-size: 14px;
+				color: var(--ion-color-grey1);
+			}			
+		}
+        [card-field]
+        {
+		    ion-item
+			{
+				--min-height: 42px;
+				border: 1px solid var(--ion-color-grey2);
+				--padding-top: 8px;
+				--padding-bottom: 8px;
+				border-radius: 4px;
+                margin-bottom: 10px;				
+			    ion-label
+				{
+					margin: 0px;
+					transform: translateY(0%) scale(1);
+					font-size: 11px;
+					font-weight: 500;
+					color: #b5b5b5;				
+				}
+			    ion-input
+				{
+					font-size: 14px;
+					--padding-top: 3px;
+					--padding-bottom: 3px;
+					color: #333;
+					--placeholder-opacity: 1;
+					font-weight: 500;				
+				}
+			    ion-datetime
+				{
+					font-size: 14px;
+					--padding-top: 3px;
+					--padding-bottom: 3px;
+					color: #333;
+					--placeholder-opacity: 1;
+					font-weight: 500;				
+				}
+			}
+			[submit-btn]
+			{		
+				ion-button
+				{ 
+					min-height: 48px;
+					--box-shadow: none;
+					font-weight: 500;
+					font-size: 15px;
+					margin:0px 0px 10px;
+				}			
+			}			
+		}		
+	}	
+	span.rigt-lined {
+		position: relative;
+		z-index: 0;
+		&:after {
+			content: "";
+			position: absolute;
+			right: -21px;
+			width: 17px;
+			height: 2px;
+			background: #00853f;
+			top: 14px;
+		}
+	}
+}
+

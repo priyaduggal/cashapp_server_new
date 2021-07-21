@@ -1,0 +1,142 @@
+ion-content {
+    --background: var(--ion-color-grey3);
+	ion-header
+	{
+	    position: relative;
+        &:after
+        {
+		    display:none;
+		}		
+		ion-toolbar
+		{
+			--background: #ececec;
+			padding: 15px 10px 40px;
+			color: #292929;
+			--min-height: 28px;
+			ion-back-button
+			{
+				color: #292929;
+				font-size:20px;
+			}
+			ion-title
+			{
+				font-size: 18px;
+			}
+		}
+	}
+	.date-cont 
+	{
+		position: relative;
+		z-index:11;
+		padding: 35px 20px 40px;
+		border-radius: 25px 25px 0px 0px;
+		margin-top: -30px;
+		background: var(--ion-color-grey3);	
+		[bal-sec]
+		{
+		   background: #ffffff;
+			border-radius: 12px;
+			padding: 30px 25px;
+			text-align: center;
+			margin-bottom: 30px;
+			width: 100%;
+			box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.07);
+			h4 
+			{
+				margin: 0px;
+				font-size: 22px;
+				font-weight: 600;
+				letter-spacing: 1px;
+				color: #00853f;
+			}
+			p 
+			{
+				margin: 0px 0px 10px;
+				font-size: 14px;
+				letter-spacing: 0.5px;
+				color: #000;
+				font-weight: 500;
+			}		
+		}
+		[list-all-psres] 
+		{
+			padding: 0px;
+			background: transparent;
+			--background: transparent;
+			ion-item 
+			{ 
+				padding:3px 0; 
+				background: #fff;
+				--background: #fff;
+				margin-bottom: 12px;
+				border-radius: 5px;
+				--padding-start: 5px;
+				--padding-end: 5px;
+				box-shadow:0px 6px 20px rgba(0, 0, 0, 0.06);
+				ion-avatar 
+				{
+					width: 40px;
+					height: 40px;
+					margin-right: 12px;
+					img 
+					{
+						width: 50px;
+						height: 50px;
+						border-radius: 7px;
+						box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.09);
+					}
+					span.icon-str 
+					{
+						width: 40px;
+						height: 40px;
+						background: var(--ion-color-gradient2);
+						display: flex;
+						align-items: center;
+						justify-content: center;
+						font-size: 22px;
+						border-radius: 5px;
+						color: #fff;
+					}
+				}
+				ion-label 
+				{
+					margin: 10px 0;
+					h2 
+					{
+						font-weight: 500;
+						letter-spacing: 0.5px;
+						font-size: 12px;
+					    white-space: normal;	
+					}
+				}
+				ion-toggle  
+				{
+					padding-left: 0px;
+					padding-right: 0px;
+				}				
+				.arrow-ri
+				{
+					position: relative;
+					z-index: 1;
+					padding-left: 8px;
+					color: #222;
+					outline:0px;
+					&:after 
+					{
+						position: absolute;
+						content: "";
+						left: 0px;
+						top: 3px;
+						z-index: -1;
+						width: 15px;
+						height: 15px;
+						border-radius: 50%;
+						background:var(--ion-color-primary);
+						opacity:0.1;
+					}					
+				}
+			}
+		} 		
+	}	
+}
+

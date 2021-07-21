@@ -1,0 +1,57 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+ion-content, h1, h2, h3, h4, h5, h6, p, span , * {
+	font-family: 'Poppins', sans-serif !important;
+}
+.slidrs.appoints .swiper-pagination-bullet {
+	width: 8px;
+	height: 8px;
+	display: inline-block;
+	border-radius: 100%;
+	background: var(--ion-color-primary);
+	opacity: 0.6;
+}
+.slidrs.appoints .swiper-pagination-bullet-active {
+	background: var(--ion-color-primary);
+	opacity: 1;
+	width: 10px;
+	height: 10px;
+	vertical-align: middle;
+}
+.date-cont [search-sec] ion-searchbar
+{
+    padding-inline-start: 0px;
+    padding-inline-end: 0px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    --box-shadow: none;
+    border: 1px solid var(--ion-color-grey2);
+    border-radius: 5px;
+    height: 44px;
+}
+.date-cont [search-sec] ion-searchbar input
+{
+    padding-inline-start: 40px;
+    padding-inline-end: 15px;
+    font-size: 14px;
+	border-radius: 5px;
+	background: transparent;
+}
+.date-cont [search-sec] ion-searchbar ion-icon
+{
+    width: 17px;
+    height: 21px;
+    top: 0px;
+    bottom: 0px;
+    margin: auto;
+}
+[service-mark-icon] {
+    max-width: 20px;
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 11;
+}
+ion-header ion-back-button {
+    font-size: 16px !important;
+}

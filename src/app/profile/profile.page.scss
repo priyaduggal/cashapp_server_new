@@ -1,0 +1,142 @@
+ion-header{
+	position:absolute;
+	top:0px;
+	left:0px;
+	right:0px;
+	&::after
+	{
+	display:none!important;
+	}
+	ion-toolbar
+	{
+		--background:transparent;
+		ion-title
+		{
+			color: var(--ion-color-white);	
+		    padding: 0px 35px;	
+		}
+		ion-buttons
+		{
+			font-size: 20px;
+			color: var(--ion-color-white);
+			position: absolute;
+			right: 10px;
+			top: 0px;
+			max-height: 30px;
+			bottom: 0px;
+			margin: auto 0px;
+			outline:0px;
+		    &[mar-10]
+			{
+			    margin-right:10px;
+			}
+		}
+	}
+
+}
+ion-content
+{
+		[userimg]
+		{  
+			position: relative;
+			text-align: center;
+			z-index: 1;
+			margin-bottom: 30px;
+			h2 
+			{
+				margin-top: 5px;
+				margin-bottom: 0px;
+				font-size: 14px;
+				font-weight: 600;
+			}
+			[img-sec]
+			{
+			    display:inline-block;
+				margin: -45px auto 0px;
+				img
+				{
+					box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
+					width: 100px;
+					height: 100px;
+					border-radius: 50%;
+					border: 2px solid var(--ion-color-white);					
+					text-align: center;
+				}
+			}
+		}
+	[profileinfo]
+	{
+
+		[profileimg]
+		{  
+			position: relative;
+			background:url(../../assets/img/profile-bg.jpg)center/cover no-repeat;
+			height:150px;
+			z-index: 1;  
+			display: flex;
+			flex-wrap: wrap;
+			align-items: flex-end;	
+			&:after 
+			{
+				position: absolute;
+				content: "";
+				top: 0px;
+				bottom: 0px;
+				left: 0px;
+				right: 0px;
+				background: var(--ion-color-gradient);
+				opacity: 0.85;
+				z-index: -1;
+			} 
+			img
+			{
+				max-width: 100%;
+				max-height: 100%;
+				width: 100%;
+				object-fit: cover;
+				object-position:bottom;
+			}
+		}
+	}
+	[profilesetting]
+	{
+        [brder-btom]
+        {
+            border-bottom: 1px dashed #dadada;		
+		}		
+		padding: 0px 20px 40px;
+		position: relative;
+		z-index: 1;
+		margin-top: -30px;
+		background: var(--ion-color-white);
+		border-radius: 30px 30px 0px 0px; 
+		[mb-10]
+		{
+		    margin-bottom:10px;
+		}
+		[profile-head] 
+		{
+		    padding: 0px 0px 10px; 
+			h3 
+			{
+				margin: 0px;
+				text-align: left;
+				font-size: 13px;
+				font-weight: 500;
+				color:var(--ion-color-grey1);
+			}		
+		}		
+		[profile-detail] 
+		{
+		    padding: 0px 0px 10px;
+			h3 
+			{
+				margin: 0px;
+				font-size: 13px;
+				font-weight: 400;
+				text-align: right;
+				color: #888;
+			}		
+		}		
+    }
+}

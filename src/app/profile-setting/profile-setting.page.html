@@ -1,0 +1,208 @@
+<ion-content>
+<ion-header>
+  <ion-toolbar>
+		<ion-back-button slot="start" defaultHref="/tabs/profile">
+			<ion-icon name="arrow-back-outline"></ion-icon>
+		</ion-back-button>
+    <ion-title class="ion-text-center">Profile Setting</ion-title>
+  </ion-toolbar>
+</ion-header>
+<div profileinfo>
+<div profileimg>
+</div>
+
+</div>
+<div profilesetting>
+	<div userimg>
+		<span img-sec>
+		    <img src="assets/img/user.jpg">
+			<label for="editphoto">
+				 <ion-icon name="create-outline"></ion-icon>
+			</label>
+			<input type="file" id="editphoto"  name="editphoto" style="display:none;"/>
+		</span>
+		<h2>John Smith</h2>
+	</div>
+    <ion-segment [(ngModel)]="profiletab">
+		<ion-segment-button value="Basic">
+		   Basic Info
+		</ion-segment-button>
+			<ion-segment-button value="pwd">
+		   Change Password
+		</ion-segment-button>
+    </ion-segment>
+	    <div [ngSwitch]="profiletab">
+			<ion-list *ngSwitchCase="'Basic'">
+        <form [formGroup]="profileForm" (ngSubmit)="profileEdit(profileForm.value)">
+				<div form-group>
+					<ion-item lines="none">
+						<ion-label position="stacked">First Name</ion-label>
+						<ion-input type="text" placeholder="First Name" formControlName="firstName" value="{{userdata.first_name}}"></ion-input>
+					</ion-item>
+
+          <div *ngIf="isSubmitprofile && proform.firstName.errors" class="invalid-feedback">
+						<ion-text validationText *ngIf="proform.firstName.errors.required">
+							<p>*First Name is required!</p>
+						</ion-text>
+				</div>
+				</div>
+        <div form-group>
+					<ion-item lines="none">
+						<ion-label position="stacked">Last Name</ion-label>
+						<ion-input type="text" placeholder="Last Name" formControlName="lastName" value="{{userdata.last_name}}"></ion-input>
+					</ion-item>
+
+
+          <div *ngIf="isSubmitprofile && proform.lastName.errors" class="invalid-feedback">
+						<ion-text validationText *ngIf="proform.lastName.errors.required">
+							<p>*Last Name is required!</p>
+						</ion-text>
+				</div>
+				</div>
+				<div form-group>
+					<ion-item lines="none">
+						<ion-label position="stacked">Phone No.</ion-label>
+						<ion-input type="text" placeholder="Enter Phone No." formControlName="phone" value="{{userdata.phone}}"></ion-input>
+					</ion-item>
+
+          <div *ngIf="isSubmitprofile && proform.phone.errors" class="invalid-feedback">
+						<ion-text validationText *ngIf="proform.phone.errors.required">
+							<p>*Phone Number is required!</p>
+						</ion-text>
+				</div>
+				</div>
+				<div form-group>
+					<ion-item lines="none">
+						<ion-label position="stacked">Email</ion-label>
+						<ion-input type="text" readonly value="{{userdata.email}}"></ion-input>
+					</ion-item>
+				</div>
+				<div form-group>
+					<ion-item lines="none">
+						<ion-label position="stacked">Country</ion-label>
+						<ion-select placeholder="Select The Country" value="{{userdata.country}}" formControlName="country" name="country" (ionChange)="onCountryChange()" okText="Save" cancelText="Cancel">
+							<ion-select-option *ngFor=" let data of countries" [value]="data.isoCode" >{{data.name}}</ion-select-option>
+							<!-- <ion-select-option value="USA">USA</ion-select-option>
+							<ion-select-option value="Canada">Canada</ion-select-option>
+							<ion-select-option value="Australia">Australia</ion-select-option> -->
+						</ion-select>
+					</ion-item>
+
+          <div *ngIf="isSubmitprofile && proform.country.errors" class="invalid-feedback">
+						<ion-text validationText *ngIf="proform.country.errors.required">
+							<p>*Country field is required!</p>
+						</ion-text>
+				</div>
+				</div>
+				<div form-group>
+					<ion-item lines="none">
+						<ion-label position="stacked" >State</ion-label>
+						<ion-select formControlName="state" value="{{userdata.state}}" name="state" (ionChange)="onStateChange()"  placeholder="Select The State" okText="Save" cancelText="Cancel">
+							<ion-select-option *ngFor="let data of states" [value]="data.isoCode">{{data.name}}</ion-select-option>
+							<!-- <ion-select-option value="California">California</ion-select-option>
+							<ion-select-option value="NewYork">New York</ion-select-option>
+							<ion-select-option value="Alaska">Alaska</ion-select-option> -->
+						</ion-select>
+					</ion-item>
+
+
+          <div *ngIf="isSubmitprofile && proform.state.errors" class="invalid-feedback">
+						<ion-text validationText *ngIf="proform.state.errors.required">
+							<p>*State field is required!</p>
+						</ion-text>
+				</div>
+				</div>
+				<div form-group>
+					<ion-item lines="none">
+						<ion-label  position="stacked">City</ion-label>
+						<ion-select formControlName="city" value="{{userdata.city}}"  placeholder="Select the city" okText="Save" cancelText="Cancel">
+							<ion-select-option *ngFor="let data of cities" [value]="data.name">{{data.name}}</ion-select-option>
+							<!-- <ion-select-option value="Niagara">Niagara</ion-select-option>
+							<ion-select-option value="Albany">Albany</ion-select-option>
+							<ion-select-option value="Binghamton">Binghamton</ion-select-option> -->
+						</ion-select>
+					</ion-item>
+
+          <div *ngIf="isSubmitprofile && proform.city.errors" class="invalid-feedback">
+						<ion-text validationText *ngIf="proform.city.errors.required">
+							<p>*City Name is required!</p>
+						</ion-text>
+				</div>
+				</div>
+				<div form-group>
+					<ion-item lines="none">
+						<ion-label position="stacked">Street</ion-label>
+						<ion-input type="text" placeholder="Enter Street Address" formControlName="street" value="{{userdata.street}}"></ion-input>
+					</ion-item>
+
+          <div *ngIf="isSubmitprofile && proform.street.errors" class="invalid-feedback">
+						<ion-text validationText *ngIf="proform.street.errors.required">
+							<p>*Street is required!</p>
+						</ion-text>
+				</div>
+				</div>
+				<ion-button expand="full" type="submit" shape="round" >Submit</ion-button>
+      </form>
+			</ion-list>
+			<ion-list *ngSwitchCase="'pwd'">
+
+
+        <form [formGroup]="passwordForm" (ngSubmit)="passwordEdit(passwordForm.value)">
+				<div form-group>
+					<ion-item lines="none">
+						<ion-label position="stacked">Old Password</ion-label>
+						<ion-input type="password" formControlName="oldpassword" placeholder="Enter Old Password"></ion-input>
+					</ion-item>
+
+          <div *ngIf="isSubmitpass && passform.oldpassword.errors" class="invalid-feedback">
+						<ion-text validationText *ngIf="passform.oldpassword.errors.required">
+							<p>*Old Password is required!</p>
+						</ion-text>
+				</div>
+				</div>
+
+
+				<div form-group>
+					<ion-item lines="none">
+						<ion-label position="stacked">New Password</ion-label>
+						<ion-input type="password" formControlName="password" placeholder="Enter New Password"></ion-input>
+					</ion-item>
+
+          <div *ngIf="isSubmitpass && passform.password.errors" class="invalid-feedback">
+            <ion-text validationText *ngIf="passform.password.errors.required">
+              <p>*New Password is required!</p>
+            </ion-text>
+            <ion-text validationText *ngIf="passform.password.errors.minlength">
+              <p>*Password must be at least 8 characters!</p>
+            </ion-text>
+            <ion-text validationText *ngIf="passform.password.errors.pattern">
+                <p>*Password must contain at least one number, Capital letter & Small letter!</p>
+            </ion-text>
+        </div>
+				</div>
+
+
+				<div form-group>
+					<ion-item lines="none">
+						<ion-label position="stacked">Confirm New Password</ion-label>
+						<ion-input type="password" formControlName="confirmPassword" placeholder="Confirm New Password"></ion-input>
+					</ion-item>
+
+          <div *ngIf="isSubmitpass && passform.confirmPassword.errors" class="invalid-feedback">
+						<ion-text validationText *ngIf="passform.confirmPassword.errors.required">
+							<p>*Confirm Password is required!</p>
+						</ion-text>
+						<ion-text validationText *ngIf="passform.confirmPassword.errors.equalTo">
+								<p>*Password Mismatch!</p>
+						</ion-text>
+				</div>
+				</div>
+				<ion-button type="submit" expand="full" shape="round" >Submit</ion-button>
+      </form>
+
+
+			</ion-list>
+	    </div>
+  </div>
+<img service-mark-icon src="assets/img/service-mark-icon.png" alt="" />
+</ion-content>

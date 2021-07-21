@@ -1,0 +1,134 @@
+<!--ion-header>
+  <ion-toolbar>
+    <ion-title>login</ion-title>
+  </ion-toolbar>
+</ion-header-->
+<ion-content>
+<div class="bg-str-all">
+	<div form-bg>
+		<div logo  class="ion-text-center">
+			<span logo-sec><img src="assets/img/logo.png"/></span>
+		</div>
+		<h3 class="rt-str"> Sign up </h3>
+	</div>
+  <form [formGroup]="signupForm" (ngSubmit)="register(signupForm.value)" >
+	<div loginform>
+		<div logininput>
+			<div form-group>
+			    <ion-label>First Name</ion-label>
+
+
+				<ion-item lines="none">
+					<ion-input name="firstName" type="text"  placeholder="Enter First Name" formControlName="firstName"></ion-input>
+				</ion-item>
+
+
+          <div *ngIf="isSubmit && form.firstName.errors" class="invalid-feedback">
+            <ion-text validationText *ngIf="form.firstName.errors.required">
+              <p>*First Name is required!</p>
+            </ion-text>
+        </div>
+			</div>
+
+			<div form-group>
+			    <ion-label>Last Name</ion-label>
+
+
+          <ion-item lines="none">
+					<ion-input name="lastName" type="text"  placeholder="Enter Last Name" formControlName="lastName"></ion-input>
+				</ion-item>
+
+
+        <div *ngIf="isSubmit && form.lastName.errors" class="invalid-feedback">
+          <ion-text validationText *ngIf="form.lastName.errors.required">
+            <p>*Last Name is required!</p>
+          </ion-text>
+      </div>
+			</div>
+
+			<div form-group>
+			    <ion-label>Email Address</ion-label>
+
+
+          <ion-item lines="none">
+					<ion-input name="email" type="text"  placeholder="Enter Email" formControlName="email"></ion-input>
+					<ion-label label-flex>
+						<ion-icon name="checkmark-outline" [color]="form.email.errors ? 'grey':'success'"></ion-icon>
+					</ion-label>
+				</ion-item>
+
+
+        <div *ngIf="isSubmit && form.email.errors" class="invalid-feedback">
+          <ion-text validationText *ngIf="form.email.errors.required">
+            <p>*Email is required!</p>
+          </ion-text>
+          <ion-text validationText *ngIf="form.email.errors.email">
+            <p>*Email must be a valid email address!</p>
+          </ion-text>
+      </div>
+			</div>
+
+			<div form-group>
+			    <ion-label>Password</ion-label>
+
+
+				<ion-item lines="none">
+					<ion-input name="password" [type]="showPassword ? 'text' : 'password'"  placeholder="**********" formControlName="password"></ion-input>
+					<ion-label label-flex>
+            <ion-button button fill="clear" (click)="togglePassword()"><ion-icon [name]="passwordToggleIcon" grey></ion-icon></ion-button>
+					</ion-label>
+				</ion-item>
+
+
+        <div *ngIf="isSubmit && form.password.errors" class="invalid-feedback">
+          <ion-text validationText *ngIf="form.password.errors.required">
+            <p>*Password is required!</p>
+          </ion-text>
+          <ion-text validationText *ngIf="form.password.errors.minlength">
+            <p>*Password must be at least 8 characters!</p>
+          </ion-text>
+          <ion-text validationText *ngIf="form.password.errors.pattern">
+              <p>*Password must contain at least one number , Capital letter & Small letter!</p>
+          </ion-text>
+      </div>
+			</div>
+
+			<div form-group>
+			    <ion-label>Confirm Password</ion-label>
+
+
+				<ion-item lines="none">
+					<ion-input name="confirmPassword" [type]="showConfirmPassword ? 'text' : 'password'"  placeholder="**********" formControlName="confirmPassword"></ion-input>
+					<ion-label label-flex>
+						<ion-button fill="clear" button (click)="toggleConfirmPassword()"><ion-icon [name]="confirmPasswordIcon" grey></ion-icon></ion-button>
+					</ion-label>
+				</ion-item>
+
+
+        <div *ngIf="isSubmit && form.confirmPassword.errors" class="invalid-feedback">
+						<ion-text validationText *ngIf="form.confirmPassword.errors.required">
+							<p>*Confirm Password is required!</p>
+						</ion-text>
+						<ion-text validationText *ngIf="form.confirmPassword.errors.equalTo">
+								<p>*Password Mismatch!</p>
+						</ion-text>
+				</div>
+			</div>
+		</div>
+
+		<div login-btn>
+
+			<ion-button type="submit"   expand="full" shape="round" color="primary">
+			Sign Up
+			</ion-button>
+
+		</div>
+	</div>
+</form>
+
+
+	<div btn-signup>
+		<p>Already have an account? <a routerLink="/" href="javascript:void(0)">Login </a></p>
+	</div>
+</div>
+</ion-content>

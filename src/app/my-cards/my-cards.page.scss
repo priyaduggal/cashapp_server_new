@@ -1,0 +1,136 @@
+ion-content {
+    --background: var(--ion-color-grey3);
+	ion-header
+	{
+	    position: relative;
+        &:after
+        {
+		    display:none;
+		}		
+		ion-toolbar
+		{
+			--background: #ececec;
+			padding: 25px 10px 50px;
+			color: #292929;
+			--min-height: 28px;
+			ion-back-button
+			{
+				color:#292929;
+				font-size:20px;
+			}			
+			ion-buttons
+			{
+				font-size: 20px;
+				min-width: 30px;
+				max-width: 30px;
+				min-height: 30px;
+				max-height: 30px;
+				display: inline-flex;
+				border-radius: 50%;
+				background: rgba(227, 27, 35, 0.08);
+				justify-content: center;
+				align-items: center;
+				outline: 0px;
+				color: #e31b23;
+			}
+			ion-title
+			{
+				font-size: 18px;
+			}
+		}
+	}
+	.date-cont 
+	{
+		position: relative;
+		z-index:11;
+		padding: 30px 20px 0;
+		border-radius: 25px 25px 0px 0px;
+		margin-top: -30px;
+		background: var(--ion-color-grey3);	
+		ion-item-sliding
+		{
+			background: var(--ion-color-white);
+			width: 100%;
+			padding: 0px;
+			border-radius: 12px;
+			box-shadow: 1px 4px 10px rgba(0, 0, 0, 0.07);
+            margin-bottom: 20px;    			
+			ion-item
+			{
+			    --background: white;
+				--padding-start: 0px;
+				--inner-padding-end: 0px;
+				padding: 15px;
+				background: #fff;			
+				ion-label
+				{
+					margin:0px;		
+					.box-crdits 
+					{
+						width: 100%;
+						.top-cips 
+						{
+							display: flex;
+							align-items: center;
+							justify-content: space-between;
+						    margin-bottom: 15px;	
+							p {
+								font-size: 10px;
+								text-transform: uppercase;
+								letter-spacing: 1px;
+								margin: 0px;
+								span {
+									display: block;
+									font-size: 13px;
+									font-weight: 500;
+									letter-spacing: 2px;
+								}
+							}
+							img.visa-s 
+							{
+								max-width: 38px;
+							}
+						}
+						.accnt-nusm 
+						{
+							color: var(--ion-color-grey1);
+							display: flex;
+							align-items: center;
+							justify-content: space-between;
+							margin: 0px 5px 0px 0px;
+							letter-spacing: 3px;
+							font-size: 12px;
+							font-weight: 500;
+						}
+						.tst-lta 
+						{
+							color: var(--ion-color-grey1);
+							p {
+								font-size: 10px;
+								text-transform: uppercase;
+								letter-spacing: 1px;
+								margin: 0px;
+								span {
+									display: block;
+									font-size: 13px;
+									font-weight: 500;
+									letter-spacing: 2px;
+								}
+							}
+						}			
+					}		
+				}		
+			}
+            ion-item-options
+            {
+			    ion-item-option
+				{
+				    padding: 0px 1px;
+					font-size: 20px;
+					outline: 0px;
+				}
+			}			
+		}		
+	}	
+}
+

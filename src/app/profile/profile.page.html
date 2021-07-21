@@ -1,0 +1,85 @@
+<ion-content>
+<ion-header>
+  <ion-toolbar>
+    <ion-title class="ion-text-center">Profile</ion-title>
+	<ion-buttons routerLink="/profile-setting" slot="end"><ion-icon name="create-outline"></ion-icon></ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<div profileinfo>
+<div profileimg>
+</div>
+
+</div>
+<div profilesetting>
+	<div userimg>
+		<span img-sec><img src="assets/img/user.jpg"></span>
+		<!--h2>John Smith</h2-->
+	</div>
+
+    <ion-row mb-10 brder-btom>
+	    <ion-col size="6">
+		    <div profile-head><h3>Name</h3></div>
+		</ion-col>
+	    <ion-col size="6">
+		    <div profile-detail><h3>{{userdata.first_name}} {{userdata.last_name}}</h3></div>
+		</ion-col>
+	</ion-row>
+    <ion-row mb-10 brder-btom>
+	    <ion-col size="6">
+		    <div profile-head><h3>Email</h3></div>
+		</ion-col>
+	    <ion-col size="6">
+		    <div profile-detail><h3>{{userdata.email}}</h3></div>
+		</ion-col>
+	</ion-row>
+    <ion-row mb-10 brder-btom>
+	    <ion-col size="6">
+		    <div profile-head><h3>Phone No.</h3></div>
+		</ion-col>
+	    <ion-col size="6">
+		    <div profile-detail><h3>{{userdata.phone}}</h3></div>
+		</ion-col>
+	</ion-row>
+    <ion-row mb-10 brder-btom>
+	    <ion-col size="6">
+		    <div profile-head><h3>Wallet</h3></div>
+		</ion-col>
+	    <ion-col size="6">
+		    <div profile-detail><h3>${{userdata.wallet}}</h3></div>
+		</ion-col>
+	</ion-row>
+    <ion-row mb-10 brder-btom>
+	    <ion-col size="6">
+		    <div profile-head><h3>Country</h3></div>
+		</ion-col>
+	    <ion-col size="6">
+		    <div profile-detail><h3>{{userdata.country}}</h3></div>
+		</ion-col>
+	</ion-row>
+    <ion-row mb-10 brder-btom>
+	    <ion-col size="6">
+		    <div profile-head><h3>State</h3></div>
+		</ion-col>
+	    <ion-col size="6">
+		    <div profile-detail><h3> {{userdata.state}}</h3></div>
+		</ion-col>
+	</ion-row>
+    <ion-row mb-10 brder-btom>
+	    <ion-col size="6">
+		    <div profile-head><h3>City</h3></div>
+		</ion-col>
+	    <ion-col size="6">
+		    <div profile-detail><h3> {{userdata.city}}</h3></div>
+		</ion-col>
+	</ion-row>
+    <ion-row mb-10 brder-btom>
+	    <ion-col size="6">
+		    <div profile-head><h3>Street</h3></div>
+		</ion-col>
+	    <ion-col size="6">
+		    <div profile-detail><h3> {{userdata.streets}}</h3></div>
+		</ion-col>
+	</ion-row>
+  </div>
+<img service-mark-icon src="assets/img/service-mark-icon.png" alt="" />
+</ion-content>

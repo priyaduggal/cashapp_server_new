@@ -1,0 +1,66 @@
+<!--ion-header>
+  <ion-toolbar>
+    <ion-title>login</ion-title>
+  </ion-toolbar>
+</ion-header-->
+<ion-content>
+<div class="bg-str-all">
+	<div form-bg>
+		<div logo  class="ion-text-center">
+			<span logo-sec><img src="assets/img/logo.png"/></span>
+		</div>
+		<h3 class="rt-str"> Login </h3>
+	</div>
+  <form [formGroup]="loginForm" (ngSubmit)="onLogin(loginForm.value)">
+	<div loginform>
+		<div logininput>
+			<div form-group>
+			    <ion-label>Email Address</ion-label>
+				<ion-item lines="none">
+					<ion-input type="text"  placeholder="Enter Email" name="email" formControlName="email"></ion-input>
+					<ion-label label-flex>
+						<ion-icon name="checkmark-outline" [color]="form.email.errors ? 'grey':'success'"></ion-icon>
+					</ion-label>
+				</ion-item>
+        <div *ngIf="isSubmit && form.email.errors" class="invalid-feedback">
+          <ion-text validationText *ngIf="form.email.errors.required">
+            <p>*Email is required!</p>
+          </ion-text>
+          <ion-text validationText *ngIf="form.email.errors.email">
+            <p>*Email must be a valid email address!</p>
+          </ion-text>
+      </div>
+			</div>
+
+			<div form-group>
+			    <ion-label>Password</ion-label>
+				<ion-item lines="none">
+					<ion-input [type]="showPassword ? 'text' : 'password'"  placeholder="********" formControlName="password" name="password"></ion-input>
+					<ion-label label-flex>
+						<ion-button button fill="clear" (click)="togglePassword()"><ion-icon [name]="passwordToggleIcon" grey></ion-icon></ion-button>
+					</ion-label>
+				</ion-item>
+        <div *ngIf="isSubmit && form.password.errors" class="invalid-feedback">
+          <ion-text validationText *ngIf="form.password.errors.required">
+            <p>*Password is required!</p>
+          </ion-text>
+      </div>
+			</div>
+
+			<div form-group forgot>
+				<p><a routerLink="/forgot-password" href="javascript:void(0)">Forgot Password?</a></p>
+			</div>
+		</div>
+		<div login-btn>
+			<ion-button type="submit" expand="full" shape="round" color="primary">
+			Login
+			</ion-button>
+		</div>
+
+	</div>
+  </form>
+	<div btn-signup>
+		<p>Don't have an account? <a routerLink="/signup" href="javascript:void(0)">Sign Up</a></p>
+	</div>
+</div>
+</ion-content>

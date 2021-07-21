@@ -1,0 +1,43 @@
+<!--ion-header>
+  <ion-toolbar>
+    <ion-title></ion-title>
+  </ion-toolbar>
+</ion-header-->
+<ion-content>
+<ion-header>
+  <ion-toolbar>
+		<ion-back-button slot="start" defaultHref="/wallet">
+			<ion-icon name="arrow-back-outline"></ion-icon>
+		</ion-back-button>   
+        <ion-title class="ion-text-center">Add Money</ion-title>
+  </ion-toolbar>
+</ion-header>
+	<div class="date-cont">	
+	    <div bal-sec>
+			<ion-item lines="none" detail="false">
+			    <ion-avatar slot="start">
+				    <span class="icon-str"> <ion-icon name="wallet-outline"></ion-icon> </span>
+			    </ion-avatar>
+			    <ion-label>
+					<p> Available Balance </p>		    
+					<h4> $2,545 </h4>
+			    </ion-label>
+			</ion-item> 
+		</div>
+			<div card-field>
+				<ion-row>
+					<ion-col size="12">
+						<ion-item lines="none">
+							<ion-icon name="wallet-outline"></ion-icon><ion-input placeholder="Enter Amount"></ion-input>
+						</ion-item>
+					</ion-col>
+					<ion-col size="12">
+						<div submit-btn>
+							<ion-button routerLink="/select-bank" expand="full" shape="round" color="primary">Proceed to add Money</ion-button>
+						</div>
+					</ion-col>
+				</ion-row>
+			</div>		
+	</div>
+<img service-mark-icon src="assets/img/service-mark-icon.png" alt="" />	
+</ion-content>

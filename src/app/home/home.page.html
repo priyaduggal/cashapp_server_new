@@ -1,0 +1,149 @@
+<!--ion-header>
+  <ion-toolbar>
+    <ion-title>home</ion-title>
+  </ion-toolbar>
+</ion-header-->
+
+<ion-content>
+	<div class="top-headr">
+		<div class="left-pric">
+			<h4> $2,545 </h4>
+			<p> Available Balance </p>
+		</div>
+		<div class="img-dtr">
+			<span class="wallt"> <ion-icon name="wallet-outline"></ion-icon> </span>
+			<img src="assets/img/user.jpg" class="usr-imgt">
+		</div>
+	</div>
+	<div class="date-cont">
+		<div logo  class="ion-text-center">
+			<span logo-sec><img src="assets/img/logo.png"/></span>
+		</div>	
+		<h4 class="ttl-hi"> Cards <a routerLink="/my-cards" href="javascript:void(0);" class="rit"> Add More + </a> </h4>
+		<div class="slidrs appoints">	
+			<ion-slides [options]="slideOpts" pager="true"  centeredSlides="true" loop="true">
+				<ion-slide>
+				  <div class="slide">
+					<div class="box-crdits">
+					    <img credit-logo src="assets/img/logo.png" />
+						<div class="top-cips">
+							<img src="assets/img/chip.png" class="chip-s">
+							<img src="assets/img/visa.png" class="visa-s">
+						</div>
+						<div class="accnt-nusm"> 
+							<span> **** </span>
+							<span> **** </span>
+							<span> **** </span>
+							<span> 1234 </span>
+						</div>
+						<div class="tst-lta">
+							<p> Name <span> Brice Seraphin </span> </p>
+							<p> Exp Date <span> 14/20 </span> </p>
+						</div>
+					</div>
+				  </div>
+				</ion-slide>
+
+				<ion-slide>
+				  <div class="slide">
+					<div class="box-crdits">
+					    <img credit-logo src="assets/img/logo.png" />
+						<div class="top-cips">
+							<img src="assets/img/chip.png" class="chip-s">
+							<img src="assets/img/visa.png" class="visa-s">
+						</div>
+						<div class="accnt-nusm"> 
+							<span> **** </span>
+							<span> **** </span>
+							<span> **** </span>
+							<span> 1234 </span>
+						</div>
+						<div class="tst-lta">
+							<p> Name <span> Brice Seraphin </span> </p>
+							<p> Exp Date <span> 14/20 </span> </p>
+						</div>
+					</div>
+				  </div>
+				</ion-slide>
+				
+				<ion-slide>
+				  <div class="slide">
+					<div class="box-crdits">
+					    <img credit-logo src="assets/img/logo.png" />
+						<div class="top-cips">
+							<img src="assets/img/chip.png" class="chip-s">
+							<img src="assets/img/visa.png" class="visa-s">
+						</div>
+						<div class="accnt-nusm"> 
+							<span> **** </span>
+							<span> **** </span>
+							<span> **** </span>
+							<span> 1234 </span>
+						</div>
+						<div class="tst-lta">
+							<p> Name <span> Brice Seraphin </span> </p>
+							<p> Exp Date <span> 14/20 </span> </p>
+						</div>
+					</div>
+				  </div>
+				</ion-slide>
+			</ion-slides>
+		</div>
+		<div class="box-categ">
+			<ion-row>
+				<ion-col size="3">
+					<div class="img-catef">
+						<span class="isn-yt"> <img src="assets/img/icon1.png"> </span>
+						<p> Account </p>
+					</div>
+				</ion-col>
+				<ion-col size="3">
+					<div class="img-catef">
+						<span class="isn-yt"> <img src="assets/img/icon2.png"> </span>
+						<p> Fund Transfer  </p>
+					</div>
+				</ion-col>
+				<ion-col size="3">
+					<div class="img-catef">
+						<span class="isn-yt"> <img src="assets/img/icon3.png"> </span>
+						<p> Deposit </p>
+					</div>
+				</ion-col>
+				<ion-col size="3">
+					<div routerLink="/wallet" class="img-catef">
+						<span class="isn-yt"> <img src="assets/img/icon4.png"> </span>
+						<p> Wallet </p>
+					</div>
+				</ion-col>
+			</ion-row>
+		</div>
+		<h4 class="ttl-hi"> Transaction History </h4>
+		<ion-list class="list-ite">
+			<ion-item lines="none">
+				<div class="img-boxtr">
+					<img src="assets/img/user2.jpg" class="img-d">
+					<h4 routerLink="/transaction-detail"> Charlotte Ellis </h4>
+					<p> March 9, 2020 </p>
+				</div>
+				<span class="tex-yy" slot="end"> -400 </span>
+			</ion-item>
+			<ion-item lines="none">
+				<div class="img-boxtr">
+					<img src="assets/img/user3.jpg" class="img-d">
+					<h4 routerLink="/transaction-detail"> Demi Bray </h4>
+					<p> March 4, 2020 </p>
+				</div>
+				<span class="tex-grns" slot="end"> +286 </span>
+			</ion-item>
+			<ion-item lines="none">
+				<div class="img-boxtr">
+					<img src="assets/img/user.jpg" class="img-d">
+					<h4 routerLink="/transaction-detail"> Charlotte Ellis </h4>
+					<p> March 9, 2020 </p>
+				</div>
+				<span class="tex-yy" slot="end"> -400 </span>
+			</ion-item>
+		</ion-list>
+	</div>
+<img service-mark-icon src="assets/img/service-mark-icon.png" alt="" />	
+</ion-content>

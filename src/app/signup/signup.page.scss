@@ -1,0 +1,243 @@
+ion-content
+{
+    --background: #fff;
+
+   [form-bg]
+	{
+		display:inline-block;
+		width: 100%;
+		text-align: center;
+		[logo]
+		{
+			padding: 30px 0px 2px;
+			[logo-sec]
+			{
+				/*width: 120px;
+				height: 120px;*/
+				display: inline-block;
+				/*background: rgba(0 , 0 , 0 , 0.22);
+				border-radius: 50%;*/
+				padding: 9px;
+				img
+				{
+					max-width:130px;
+				}
+			}
+		}
+	}
+	[btn-signup]
+	{
+		padding: 0px 0px 15px;
+		text-align: center;
+		/*position: absolute;
+		bottom: 0;
+		left: 0;
+		right: 0;*/
+		p
+		{
+			color: #696969;
+			font-weight: 300;
+			font-size: 14px;
+			margin:0px;
+		a
+		{
+			color:  #222;
+			font-weight: 500;
+			text-decoration: none !important;
+			display: inline-block;
+			padding: 0px;
+		}
+		}
+	}
+	[loginform]
+	{
+		padding: 0px 0px 30px;
+		display: inline-block;
+		width: 100%;
+		max-width: 100%;
+		position: relative;
+		z-index: 1;
+		/*&:after
+		{
+			position: absolute;
+			content: "";
+			top: 0px;
+			bottom: 0px;
+			left: -30px;
+			right: 0px;
+			background: #fff;
+			transform: skewX(-6deg);
+			border-radius: 0 12px 12px 0;
+			z-index: -1;
+		}*/
+		[login-btn]
+		{
+		    text-align: right;
+			padding: 15px 20px 0px;
+			ion-button
+			{
+				padding: 0px;
+				--padding-start: 0px;
+				--padding-end: 0px;
+				--box-shadow: 0px 0px 15px 0px rgba(80, 80, 80, 0.10);
+				font-weight: 500;
+				font-size: 14px;
+				border-radius: 40px;
+				background: var(--ion-color-white);
+				--background: var(--ion-color-white);
+				color: var(--ion-color-primary);
+				margin: 0px;
+				text-transform: capitalize;
+				height: 48px;
+			}
+		}
+		[forgot]
+		{
+		    text-align:left;
+			p
+			{
+				margin: 0px;
+				padding: 0px 25px;
+				font-size: 14px;
+				color: var(--ion-color-grey1);
+				a
+				{
+					color: #010101;
+					font-weight: 600;
+					text-decoration: none !important;
+				}
+			}
+
+		}
+		[logininput]
+		{
+		    padding: 0px 20px 0 20px;
+			[form-group]
+			{
+				margin-bottom: 25px;
+				ion-label
+				{
+					font-size: 14px;
+					color: #9a9a9a;
+					font-weight: 400;
+					margin-bottom: 0px;
+					display: block;
+				}
+				&[forgot]
+				{
+				    text-align:right;
+					p
+					{
+						margin: 0px;
+						padding: 0px;
+						font-size: 14px;
+						color: #222;
+						a
+						{
+							color:#e31b23;
+							font-weight: 500;
+							text-decoration:none!important;
+							font-size: 13px;
+						}
+					}
+
+				}
+				ion-item
+				{
+					border-bottom: 1px solid rgba(0 , 0 , 0 , 0.3);
+					border-radius: 0px;
+					--min-height: 40px;
+					--padding-start: 0px;
+					--inner-padding-end: 0px;
+					--background: transparent;
+					ion-icon
+					{
+						font-size: 18px;
+						color: #a2a2a2;
+					}
+					[label-flex]
+					{
+						display:flex;
+						margin:0px;
+					}
+					ion-input
+					{
+						color: #222;
+						--placeholder-opacity: 1;
+						--padding-start: 0px;
+						--padding-bottom: 0px;
+						--padding-top: 0px;
+						font-size: 14px;
+					}
+				}
+			}
+
+		}
+	}
+	h3.rt-str {
+		margin-top: 0;
+		font-size: 24px;
+		font-weight: 600;
+		margin-bottom: 25px;
+		color: #222;
+	}
+	.bg-str-all {
+		min-height: 100%;
+		position: relative;
+		padding-bottom: 20px;
+		/* --background: url("../../assets/img/bg-login.jpg");
+		background: url("../../assets/img/bg-login.jpg");
+		background-size: cover;
+		background-position: center center;*/
+		display: block;
+		align-items: center;
+	}
+
+  .invalid-feedback ion-text{
+    color: red;
+    font-size: 12px;
+  }
+}
+span.logo-cent-wh {
+    width: 130px;
+    height: 130px;
+    background: #fff;
+    border-radius: 50%;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    position: relative;
+    z-index: 0;
+    margin-bottom: 16px;
+    margin-top: 10px;
+    padding-top: 18px !important;
+
+	&:before {
+		content: "";
+		position: absolute;
+		top: -14%;
+		left: -14%;
+		right: -14%;
+		bottom: -14%;
+		background: #fff;
+		border-radius: 50%;
+		z-index: -1;
+		opacity: 0.05;
+	}
+	&:after {
+		content: "";
+		position: absolute;
+		top: -7%;
+		left: -7%;
+		right: -7%;
+		bottom: -7%;
+		background: #fff;
+		border-radius: 50%;
+		z-index: -1;
+		opacity: 0.1;
+	}
+	img {
+		width: 100px;
+	}
+}

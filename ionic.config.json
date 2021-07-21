@@ -1,0 +1,7 @@
+{
+  "name": "cashapp",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

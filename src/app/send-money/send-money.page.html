@@ -1,0 +1,78 @@
+<!--ion-header>
+  <ion-toolbar>
+    <ion-title></ion-title>
+  </ion-toolbar>
+</ion-header-->
+<ion-content>
+<ion-header>
+  <ion-toolbar>
+		<ion-back-button slot="start" defaultHref="/wallet">
+			<ion-icon name="arrow-back-outline"></ion-icon>
+		</ion-back-button>   
+        <ion-title class="ion-text-center">Send Money</ion-title>
+		<ion-buttons slot="end"><ion-icon name="qr-code-outline"></ion-icon></ion-buttons>
+  </ion-toolbar>
+</ion-header>
+	<div class="date-cont">	
+	    <div search-sec>
+		    <ion-searchbar></ion-searchbar>
+	    </div>
+	    <div recent-send>
+		    <h3 class="ttl-hi">Recently Send</h3>
+			<ion-slides pager="false" [options]="slideOpts">		
+                <ion-slide>			
+					<div recent-sec routerLink="/amount-transfer">
+						<img src="assets/img/user.jpg" alt="" />
+						<h4>Charlotte Ellis</h4>
+						<p>March 9, 2020</p>
+						<span class="monew-s"> - $300 </span>
+					</div>
+                </ion-slide>		
+                <ion-slide>			
+					<div recent-sec routerLink="/amount-transfer">
+						<img src="assets/img/user2.jpg" alt="" />
+						<h4>Thomas Smith</h4>
+						<p>March 9, 2020</p>
+						<span class="monew-pl"> + $250 </span>
+					</div>
+                </ion-slide>		
+                <ion-slide>			
+					<div recent-sec routerLink="/amount-transfer">
+						<img src="assets/img/user3.jpg" alt="" />
+						<h4>Victor Williams</h4>
+						<p>March 9, 2020</p>
+						<span class="monew-s"> - $530 </span>
+					</div>
+                </ion-slide>			
+            </ion-slides>			
+		</div>
+		<div contact-sec>
+			<h4 class="ttl-hi">Your Contacts</h4>
+			<ion-list class="list-ite">
+				<ion-item lines="none">
+						<ion-avatar><img src="assets/img/user2.jpg" class="img-d"></ion-avatar>
+					<div class="img-boxtr">
+						<h4> Charlotte Ellis </h4>
+						<p> +001 1234 567 890 </p>
+					</div>
+				</ion-item>
+				<ion-item lines="none">
+						<ion-avatar><img src="assets/img/user3.jpg" class="img-d"></ion-avatar>
+					<div class="img-boxtr">
+						<h4> Demi Bray </h4>
+						<p> +001 9876 543 210 </p>
+					</div>
+				</ion-item>
+				<ion-item lines="none">
+						<ion-avatar><img src="assets/img/user.jpg" class="img-d"></ion-avatar>
+					<div class="img-boxtr">
+						<h4> Charlotte Ellis </h4>
+						<p> +001 1234 567 890 </p>
+					</div>
+				</ion-item>
+			</ion-list>	
+		</div>
+	</div>
+    <ion-button addnew-btn>Add New <ion-icon name="person-add-outline"></ion-icon></ion-button>
+<img service-mark-icon src="assets/img/service-mark-icon.png" alt="" />	
+</ion-content>

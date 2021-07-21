@@ -1,0 +1,60 @@
+<!--ion-header>
+  <ion-toolbar>
+    <ion-title></ion-title>
+  </ion-toolbar>
+</ion-header-->
+<ion-content>
+<ion-header>
+  <ion-toolbar>
+		<ion-back-button slot="start" defaultHref="/tabs/home">
+			<ion-icon name="arrow-back-outline"></ion-icon>
+		</ion-back-button>   
+        <ion-title class="ion-text-center">Wallet</ion-title>
+  </ion-toolbar>
+</ion-header>
+	<div class="date-cont">	
+	    <div bal-sec>
+			<p> Available Balance </p>		    
+			<h4> $2,545 </h4>
+		</div>
+		<ion-list list-all-psres>
+			<ion-item lines="none" detail="false">
+			    <ion-avatar slot="start">
+				    <span class="icon-str"> <ion-icon name="cash-outline"></ion-icon> </span>
+			    </ion-avatar>
+			    <ion-label>
+				    <h2>Request Amount</h2>
+			    </ion-label>
+			    <span routerLink="/request-amount" class="arrow-ri" slot="end"><ion-icon name="arrow-forward-outline"></ion-icon>  </span>
+			</ion-item> 
+			<ion-item lines="none" detail="false">
+			    <ion-avatar slot="start">
+				    <span class="icon-str"> <ion-icon name="card-outline"></ion-icon> </span>
+			    </ion-avatar>
+			    <ion-label>
+				    <h2>Bank to Wallet Transfers</h2>
+			    </ion-label>
+			    <span routerLink="/bank-wallet-transfers" class="arrow-ri" slot="end"><ion-icon name="arrow-forward-outline"></ion-icon>  </span>
+			</ion-item> 
+			<ion-item lines="none" detail="false">
+			    <ion-avatar slot="start">
+				    <span class="icon-str"> <ion-icon name="wallet-outline"></ion-icon> </span>
+			    </ion-avatar>
+			    <ion-label>
+				    <h2>Wallet to Wallet Transfers</h2>
+			    </ion-label>
+			    <span routerLink="/send-money" class="arrow-ri" slot="end"><ion-icon name="arrow-forward-outline"></ion-icon>  </span>
+			</ion-item> 
+			<ion-item lines="none" detail="false">
+			    <ion-avatar slot="start">
+				    <span class="icon-str"> <ion-icon name="cash-outline"></ion-icon> </span>
+			    </ion-avatar>
+			    <ion-label>
+				    <h2>Wallet to Bank Transfer</h2>
+			    </ion-label>
+			    <span routerLink="/bank-wallet-transfers" class="arrow-ri" slot="end"><ion-icon name="arrow-forward-outline"></ion-icon>  </span>
+			</ion-item> 
+		</ion-list>		
+	</div>
+<img service-mark-icon src="assets/img/service-mark-icon.png" alt="" />	
+</ion-content>

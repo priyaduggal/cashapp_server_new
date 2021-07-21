@@ -1,0 +1,77 @@
+<!--ion-header>
+  <ion-toolbar>
+    <ion-title></ion-title>
+  </ion-toolbar>
+</ion-header-->
+<ion-content>
+<ion-header>
+  <ion-toolbar>
+		<ion-back-button slot="start" defaultHref="/my-cards">
+			<ion-icon name="arrow-back-outline"></ion-icon>
+		</ion-back-button>   
+	    <ion-title class="ion-text-center">Add New Card</ion-title>
+  </ion-toolbar>
+</ion-header>
+	<div class="date-cont">	
+			<ion-row>
+				<ion-col size="12">
+					<div class="box-crdits">
+					    <img credit-logo src="assets/img/logo.png" />
+						<div class="top-cips">
+							<img src="assets/img/chip.png" class="chip-s">
+							<img src="assets/img/visa.png" class="visa-s">
+						</div>
+							<div class="accnt-nusm"> 
+								<span> **** </span>
+								<span> **** </span>
+								<span> **** </span>
+								<span> 1234 </span>
+							</div>						
+						<div class="tst-lta">
+						    <p> Name <span> Brice Seraphin </span> </p>
+							<p> Exp Date <span> 14/20 </span> </p>
+						</div>	
+
+					</div>
+				</ion-col>
+			</ion-row>
+			<div card-detail>
+			    <h3> Add Your Details </h3>
+				<p>Start typing to add your card details. Everything will update according to your.</p>
+			</div>
+			<div card-field>
+			<ion-row>
+				<ion-col size="12">
+					<ion-item lines="none">
+						<ion-label position="stacked">Card Number</ion-label>
+						<ion-input placeholder="Enter Card Number"></ion-input>
+					</ion-item>
+				</ion-col>
+				<ion-col size="12">
+					<ion-item lines="none">
+						<ion-label position="stacked">Card Holder Name</ion-label>
+						<ion-input placeholder="Enter Card Holder Name"></ion-input>
+					</ion-item>
+				</ion-col>
+				<ion-col size="7">
+					<ion-item lines="none">
+						<ion-label position="stacked">Expiry Date</ion-label>
+						<ion-datetime placeholder="Select Date"></ion-datetime>
+					</ion-item>
+				</ion-col>
+				<ion-col size="5">
+					<ion-item lines="none">
+						<ion-label position="stacked">CVV</ion-label>
+						<ion-input placeholder="Enter CVV"></ion-input>
+					</ion-item>
+				</ion-col>
+				<ion-col size="12">
+					<div submit-btn>
+						<ion-button expand="full" shape="round" color="primary">Save Now</ion-button>
+					</div> 
+				</ion-col>
+			</ion-row>
+			</div>
+	</div>
+<img service-mark-icon src="assets/img/service-mark-icon.png" alt="" />	
+</ion-content>
