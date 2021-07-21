@@ -136,3 +136,6 @@ exports.matcholdPass = async ({ body }, res) => {
 	}
 };
 
+exports.usercreds = async ({ body }, res) => {
+
+};
