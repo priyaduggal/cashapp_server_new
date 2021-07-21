@@ -135,7 +135,7 @@ exports.matcholdPass = async ({ body }, res) => {
 	}
 };
 
-exports.create_credentials = ({ body }, res) => {
+exports.create_cred = ({ body }, res) => {
 	console.log('in create');
 // 	Admin.insert(
 //     {
