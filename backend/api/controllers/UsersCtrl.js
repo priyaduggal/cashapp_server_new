@@ -8,6 +8,7 @@ var mongoose = require("mongoose"),
 	notifications = mongoose.model("notifications"),
 	userrequest = mongoose.model("userrequest"),
 	transaction = mongoose.model("transaction"),
+	sharedqrcode = mongoose.model("sharedqrcode"),
 
 	path = require("path"),
 	fs = require("fs");
@@ -28,7 +29,7 @@ var multer = require("multer");
 var FCM = require('fcm-node');
 var serverKey = 'AAAAtZzykvw:APA91bHs2lEhomJiZdT4Ovg7rpc74vR0Fbv2R73C7uEWXmlGi4L1WrhIfPsKwCyvEEaMWDVDLK9Lvag3XKaev_DkekDEawZKbM5hrtUTYeFZ_t4PyQcNwPxbIi8lvvAD74knJN2kbSCK'; //put your server key here
 var fcm = new FCM(serverKey);
-var stripe = require('stripe')('sk_test_51IxqwqDRqWq4J1reAqrZYK2M2G4vCkCas8usgd6YEVf4BCDXdkkoHZl4UPhqmAFrpDlB5FLMMDNS34Azzk59HBcW00g1GeZFx6');
+var stripe = require('stripe')('sk_test_51ILUtIG82h3USmHXwUuoY1mbKE5A6PTQIpBydy445aDOAXT7KlZO7t7t0AzsdvY8fMIfHlI0UWPNiTBqbdrIfdAV00RxHnHt4k');
 var transporter = nodemailer.createTransport(
 	smtpTransport({
 		service: "gmail",
@@ -42,6 +43,42 @@ var transporter = nodemailer.createTransport(
 /************LOGIN************ */
 
 
+exports.shareqr = async ({ body }, res) => {
+var new_favourite = new sharedqrcode({
+      from_id : body.fromid,
+      to_id : body.toid,
+    });
+   
+    new_favourite.save(function(err,qry){
+	if(qry == null){
+
+
+					res.json({ status: 500, msg: err });
+
+				}else{
+	var add_notification1 = new notifications({
+						from_id : body.fromid,
+						to_id :body.toid,
+						title: 'QR Code Shared',
+						description: 'QR Code shared by ',
+						linked_url: 'sharedqrcode',
+						linked_id: '',
+						linked_table: 'sharedqrcode',
+						amount:  0,
+						status: 0,
+						read: 0,
+						created_at : new Date()
+						});
+						add_notification1.save(function(errnoti1,qry1){
+
+						});
+					res.json({ status: 200, msg: "Added successfully" });
+
+				}
+
+    });
+
+};
 exports.addcard = async ({ body }, res) => {
 
 	 var new_favourite = new Card({
@@ -318,13 +355,11 @@ notifications.updateOne({ to_id:body.user_id },{$set: {read: 1,}},{ new: true },
                   uid = notification.from_id;
                   	User.findOne({ _id: notification.from_id }, function(err, user) {
  												if(errors.indexOf(user) == -1){
-
 														dict = {
 														notification :notification,
 														user : user,
 														created_at:notification.created_at,
 														};
-
 														counter = counter + 1;
 														all_notifications.push(dict);
 														if(counter == userexist.length){
@@ -333,47 +368,166 @@ notifications.updateOne({ to_id:body.user_id },{$set: {read: 1,}},{ new: true },
 														   total: count,
 														 data: arraySort(all_notifications, 'created_at', {reverse: true}) });
 														}
-
  												}
-
                   	});
 				  });
-					
 				} else {
 					res.json({ status: statuscode.UNAUTHORIZED, msg: "No records found" ,data:[]});
 				}
-			
 		});
 });
 };
 exports.searchusers = async ({ body }, res) => {
 
-var conditions = {_id : {$ne : body.user_id}};
-var text=body.text.split(" ");
- var conditions = {first_name:text[0] , last_name:text[1]};
+//var text=body.text.split(" ");
+ var conditions = {_id : {$ne : body.user_id},username:body.text};
 // conditions['$or'] = [ 
 //       {first_name : { '$regex' :body.text, '$options' : 'i' }},
 //       {last_name : { '$regex' : body.text, '$options' : 'i' }} 
 //     ]
-	User.find(conditions,'first_name last_name _id', function(err, userexist) {
+
+
+	User.find(conditions,'first_name last_name _id username', function(err, userexist) {
 			if (userexist.length>0) {
 				
 					res.json({ status: statuscode.SUCCESS, msg: "Login Successfully!", data: userexist });
 				} else {
+
+					console.log(body.text.indexOf(' '));
+
+        if(body.text.indexOf(' ') >= 0){
+				var text=body.text.split(" ");
+
+console.log('sssssssssss',text);
+
+
+				var conditions1 = {_id : {$ne : body.user_id}};
+				 conditions1['$and'] = [ 
+				       {first_name : { '$regex' :text[0], '$options' : 'i' }},
+				       {last_name : { '$regex' : text[1], '$options' : 'i' }} 
+				     ]
+
+				     console.log('conditions1',conditions1);
+				     User.find(conditions1,'first_name last_name _id username', function(err, userexist1) {
+
+				     
+				
+					res.json({ status: statuscode.SUCCESS, msg: "Login Successfully!", data: userexist1 });
+			
+
+				     });
+
+				   }else{
+
+
 					res.json({ status: statuscode.SUCCESS, msg: "Incorrect Password" ,data: []});
+				}
 				}
 			
 		});
 
 
 };
+exports.allusersphone = async ({ body }, res) => {
+
+User.find({_id : {$ne : body.user_id}},' _id  phone ',{ sort: {'created_at': -1}}, function(err, userexist) {
+			if (userexist.length>0) {
+				  var counter = 0,all_notifications = [],uid = '', dict = {};
+				  userexist.forEach(function(notification){
+				  	uid = notification._id;
+
+						 var conditions = {};
+						conditions['$or'] = [ 
+						      {from_id : { '$regex' :uid, '$options' : 'i' }},
+						      {to_id : { '$regex' : uid, '$options' : 'i' }} 
+						    ];
+
+
+                  	transaction.count(conditions, function(err, user) {
+ 											
+														dict = {
+														
+														phone:notification.phone,
+														_id:notification._id,
+														
+														};
+														counter = counter + 1;
+														all_notifications.push(dict);
+														if(counter == userexist.length){
+														res.json({ status: statuscode.SUCCESS,
+														 msg: "Fetched Successfully!",
+														  
+														 data: arraySort(all_notifications, 'created_at', {reverse: true}) });
+														}
+ 												
+                  	});
+
+				  });
+
+			
+
+
+				
+
+				} else {
+
+					res.json({ status: statuscode.UNAUTHORIZED, msg: "Incorrect Password" });
+				}
+			
+		});
+
+};
 exports.allusers = async ({ body }, res) => {
 
-		User.find({_id : {$ne : body.user_id}}, function(err, userexist) {
+		User.find({_id : {$ne : body.user_id}},'image username first_name last_name _id email phone status email_verified',{ sort: {'created_at': -1}}, function(err, userexist) {
 			if (userexist.length>0) {
+				  var counter = 0,all_notifications = [],uid = '', dict = {};
+				  userexist.forEach(function(notification){
+				  	uid = notification._id;
+
+						 var conditions = {};
+						conditions['$or'] = [ 
+						      {from_id : { '$regex' :uid, '$options' : 'i' }},
+						      {to_id : { '$regex' : uid, '$options' : 'i' }} 
+						    ];
+
+
+                  	transaction.count(conditions, function(err, user) {
+ 											
+														dict = {
+														notification :notification,
+														image:notification.image,
+														username:notification.username,
+														first_name:notification.first_name,
+														last_name:notification.last_name,
+														email:notification.email,
+														phone:notification.phone,
+														_id:notification._id,
+														status:notification.status,
+														tcount : user,
+														email_verified:notification.email_verified,
+														created_at:notification.created_at,
+														};
+														counter = counter + 1;
+														all_notifications.push(dict);
+														if(counter == userexist.length){
+														res.json({ status: statuscode.SUCCESS,
+														 msg: "Fetched Successfully!",
+														  
+														 data: arraySort(all_notifications, 'created_at', {reverse: true}) });
+														}
+ 												
+                  	});
+
+				  });
+
+			
+
+
 				
-					res.json({ status: statuscode.SUCCESS, msg: "Login Successfully!", data: userexist });
+
 				} else {
+
 					res.json({ status: statuscode.UNAUTHORIZED, msg: "Incorrect Password" });
 				}
 			
@@ -387,6 +541,12 @@ exports.login_user = async ({ body }, res) => {
 				const passwordmatch = bcrypt.compareSync(body.password, userexist.password);
 				console.log(passwordmatch);
 				if (passwordmatch) {
+
+						if(userexist.status==2)
+						{
+							res.json({ status: 402, msg: "User blocked ! Please contact admin !", data: userexist });
+						}else{
+
 						User.updateOne(
                   { _id: userexist._id },
                   {
@@ -398,6 +558,7 @@ exports.login_user = async ({ body }, res) => {
                   function(err, updated) {
                   });
 					res.json({ status: statuscode.SUCCESS, msg: "Login Successfully!", data: userexist });
+				}
 				} else {
 					res.json({ status: statuscode.UNAUTHORIZED, msg: "Incorrect Password" });
 				}
@@ -433,63 +594,45 @@ User.findOne({ _id: body.user_id }, function(usererr, userexist) {
 });
 };
 exports.add_user = async ({ body }, res) => {
-	console.log(body);
+//	console.log(body);
 	User.findOne({ email: body.email }, function(usererr, userexist) {
 
+if(userexist)
+{
 
-		if (userdata) {
-    console.log('work start');
-    console.log(userexist);
-		var data = JSON.stringify(userexist);
-		console.log(JSON.parse(data));
-		var userdata = JSON.parse(data);
-    console.log('work start2');
-			if (userdata.email_verified == false) {
-				console.log("entered update mode");
-				var salt = bcrypt.genSaltSync(10);
-				var hash = bcrypt.hashSync(body.password, salt);
-
-				User.updateOne(
-					{ _id: userdata._id },
-					{
-						$set: {
-							first_name: body.firstName,
-							last_name: body.lastName,
-							email: body.email,
-							password: hash,
-							email_verified: false,
-								fcm_token:body.fcm_token
-						}
-					},
-					{ new: true },
-					function(err, updated) {
-						console.log("yes");
-						console.log(updated);
-					}
-				);
-				res.json({
-					error: null,
-					status: statuscode.SUCCESS,
-					data: userdata,
-					msg: "We have sent a link to your Email, Please verify First!"
-				});
-			} else {
-				res.json({
-					statuscode: statuscode.BAD_REQUEST,
+res.json({
+					status: 402,
 					msg: "User with this email already exist! Try different Email!"
 				});
-			}
-		} else {
-			var salt = bcrypt.genSaltSync(10);
-			var hash = bcrypt.hashSync(body.password, salt);
+}else{
 
+User.findOne({ username: body.username }, function(usererr1, userexist1) {
+
+	if(userexist1)
+{
+
+res.json({
+					status: 402,
+					msg: "User with this username already exist! Try different Username!"
+				});
+}else{
+	//adduser
+
+		var salt = bcrypt.genSaltSync(10);
+			var hash = bcrypt.hashSync(body.password, salt);
 			var new_user = new User({
 				first_name: body.firstName,
 				last_name: body.lastName,
+				username:body.username,
 				email: body.email,
+				send_id:'money-transfer.gif',
+				accept_id:'26hitR98FMcJdz3MY.gif',
+				paid_id:'payment.gif',
+				reject_id:'cKPViLWvlFwpVDiQhS.gif',
+				money_bank:'9ffe24c22fd2860e9fc5ac9d9fc5e743.gif',
+				money_wallet:'d94d43c0fc0f2807f4429138c417dfd5.gif',
 				password: hash
 			});
-
 			new_user.save(function(err, user) {
 				if (user == null) {
 					res.json({
@@ -509,7 +652,84 @@ exports.add_user = async ({ body }, res) => {
 					});
 				}
 			});
-		}
+
+}
+
+});
+
+}
+
+		// if (userexist) {
+		// var data = JSON.stringify(userexist);
+		// console.log(JSON.parse(data));
+		// var userdata = JSON.parse(data);
+  //   console.log('work start2');
+		// 	if (userdata.email_verified == false) {
+		// 		console.log("entered update mode");
+		// 		var salt = bcrypt.genSaltSync(10);
+		// 		var hash = bcrypt.hashSync(body.password, salt);
+
+		// 		User.updateOne(
+		// 			{ _id: userdata._id },
+		// 			{
+		// 				$set: {
+		// 					first_name: body.firstName,
+		// 					last_name: body.lastName,
+		// 					email: body.email,
+		// 					username:body.username,
+		// 					password: hash,
+		// 					email_verified: false,
+		// 					fcm_token:body.fcm_token
+		// 				}
+		// 			},
+		// 			{ new: true },
+		// 			function(err, updated) {
+		// 				console.log("yes");
+		// 				console.log(updated);
+		// 			}
+		// 		);
+		// 		res.json({
+		// 			error: null,
+		// 			status: statuscode.SUCCESS,
+		// 			data: userdata,
+		// 			msg: "We have sent a link to your Email, Please verify First!"
+		// 		});
+		// 	} else {
+		// 		res.json({
+		// 			statuscode: statuscode.BAD_REQUEST,
+		// 			msg: "User with this email already exist! Try different Email!"
+		// 		});
+		// 	}
+		// } else {
+		// 	var salt = bcrypt.genSaltSync(10);
+		// 	var hash = bcrypt.hashSync(body.password, salt);
+		// 	var new_user = new User({
+		// 		first_name: body.firstName,
+		// 		last_name: body.lastName,
+		// 		username:body.username,
+		// 		email: body.email,
+		// 		password: hash
+		// 	});
+		// 	new_user.save(function(err, user) {
+		// 		if (user == null) {
+		// 			res.json({
+		// 				error: err,
+		// 				status: statuscode.SUCCESS,
+		// 				data: null
+		// 			});
+		// 		} else {
+		// 			console.log("sending mail");
+		// 			sendVerificationEmail(body, user);
+
+		// 			res.json({
+		// 				error: null,
+		// 				status: statuscode.SUCCESS,
+		// 				data: user,
+		// 				msg: "We have sent a link to your Email, Please verify First!"
+		// 			});
+		// 		}
+		// 	});
+		// }
 	});
 };
 
@@ -519,7 +739,7 @@ exports.add_user = async ({ body }, res) => {
 
 function sendcontactemail(body, user) {
 const credentials = {
-		email: 'priyaindiit@gmail.com',
+		email: 'blackpowercashapp@gmail.com',
 		time: new Date().getTime()
 	};
 	console.log(credentials);
@@ -527,7 +747,7 @@ const credentials = {
 
 const mailOptions = {
 		from: '"CashApp 🖐" <cashifyapp233@gmail.com>',
-		to: 'priyaindiit@gmail.com',
+		to: 'blackpowercashapp@gmail.com',
 		subject: "Contact Admin ✔",
 		text: "CashApp ",
 		html: `
@@ -657,6 +877,19 @@ exports.mailverification = async (req, res) => {
 
 /************GET BY USERID************ */
 
+exports.getByUserActid = async ({ body }, res) => {
+	try {
+		User.findOne({ _id: body.user_id },'account_id send_id accept_id reject_id paid_id money_bank money_wallet',function(err, userdata) {
+			if (userdata) {
+				res.json({ status: statuscode.SUCCESS, msg: "Fetched Successfully!", data: userdata });
+			} else {
+				res.json({ staus: statuscode.UNAUTHORIZED, msg: "Sorry! No user exist!", data: "" });
+			}
+		});
+	} catch (e) {
+		res.json({ status: statuscode.SERVER_ERROR, msg: "Server Error!" });
+	}
+};
 exports.getByUserId = async ({ body }, res) => {
 	try {
 		User.findOne({ _id: body.user_id }, function(err, userdata) {
@@ -837,8 +1070,17 @@ var upload = multer({ storage: storage ,limits: { fieldSize: 25 * 1024 * 1024 }}
 
 
 exports.uploadIdImage = function(req, res) {
-console.log('in backend:',req.body);
-
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'images/profile/')
+    },
+    filename: function (req, file, cb) {
+      var efile = file.originalname.replace(/ /g,"_");
+      efile = efile.replace(/[&\/\\#,+()$~%'":*?<>{}]/g, '');
+        cb(null, new Date().getTime()+efile)
+    }
+  });
+  var upload = multer({ storage:storage }).single('file');
   upload(req, res, function(err) {
       if (err) {
           res.json({ error_code: statuscode.BAD_REQUEST, err_desc: err });
@@ -852,7 +1094,7 @@ console.log('in backend:',req.body);
                   { _id: userdata._id },
                   {
                       $set: {
-                          id_proof: base64Image
+                          id_proof: req.file.filename
                       }
                   },
                   { new: true },
@@ -876,43 +1118,147 @@ console.log('in backend:',req.body);
 };
 exports.uploadImage = function(req, res) {
 
-  console.log('in backend:',req.body);
-
-
-  upload(req, res, function(err) {
-      if (err) {
-          res.json({ error_code: statuscode.BAD_REQUEST, err_desc: err });
-          return;
-      }
-
-      User.findOne({ _id: req.body.id, email_verified: true }, function(err, userdata) {
-          if (userdata) {
-            let base64Image = req.body.image;
-              User.updateOne(
-                  { _id: userdata._id },
-                  {
-                      $set: {
-                          image: base64Image
-                      }
-                  },
-                  { new: true },
-                  function(err, updated) {
-                      console.log("yes");
-                      console.log(updated);
-                      if(updated.nModified == 1){
-                        User.findOne({ _id: userdata._id , email_verified: true }, function(err, userdat) {
-                          if(userdat){
-                            res.json({ status: statuscode.SUCCESS, msg: "Image updated Successfully!", data: userdat });
-                          }
-                        });
-                      }
-                  }
-              );
-          } else {
-              res.json({ status: statuscode.UNAUTHORIZED, msg: "Sorry! No user exists!", data: "" });
-          }
-      });
+ var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'images/profile/')
+    },
+    filename: function (req, file, cb) {
+      var efile = file.originalname.replace(/ /g,"_");
+      efile = efile.replace(/[&\/\\#,+()$~%'":*?<>{}]/g, '');
+        cb(null, new Date().getTime()+efile)
+    }
   });
+  var upload = multer({ storage:storage }).single('file');
+
+
+upload(req,res,function(err){
+    if(err){
+      res.send({
+        error: err,
+        status: 0,
+        data: null
+      });
+    }
+    else
+    {
+    	 User.findOne({ _id: req.body.id, email_verified: true },'name', function(err, check) {
+
+
+ if(check){
+           var setters = {
+           image:req.file.filename
+          
+           }
+
+
+            User.update({ _id: req.body.id }, { $set: setters}, {new: true}, function(err, task) {
+              if(task == null){
+               res.send({
+                 status: 0
+              });
+            }else{
+              res.send({
+                status: 1,
+                image: (errors.indexOf(req.file) == -1) ? req.file.filename : ''
+              });
+            } 
+          });
+        }
+        else{
+          res.send({
+            status: 2
+          });
+    	 }
+
+    	});
+
+
+
+    }
+
+});
+
+
+// var upload = multer({ storage:storage }).single('file');
+
+// upload(req,res,function(err){
+//     if(err){
+//       res.send({
+//         error: err,
+//         status: 0,
+//         data: null
+//       });
+//     }
+//     else
+//     {
+//     	    User.findOne({ _id: req.body.id, email_verified: true },'name', function(err, check) {
+//         if(check){
+//           var setters = {
+//             image:req.file.filename
+          
+//           }
+         
+//           User.update({ _id: req.body._id }, { $set: setters}, {new: true}, function(err, task) {
+//              if(task == null){
+//               res.send({
+//                 status: 0
+//               });
+//             }else{
+//               res.send({
+//                 status: 1,
+//                 image: (errors.indexOf(req.file) == -1) ? req.file.filename : ''
+//               });
+//             } 
+//           });
+//         }
+//         else{
+//           res.send({
+//             status: 2
+//           });
+//         }
+//       });
+//    }
+
+// });
+
+
+  // console.log('in backend:',req.body);
+
+
+  // upload(req, res, function(err) {
+  //     if (err) {
+  //         res.json({ error_code: statuscode.BAD_REQUEST, err_desc: err });
+  //         return;
+  //     }
+
+  //     User.findOne({ _id: req.body.id, email_verified: true }, function(err, userdata) {
+  //         if (userdata) {
+  //           let base64Image = req.body.image;
+  //             User.updateOne(
+  //                 { _id: userdata._id },
+  //                 {
+  //                     $set: {
+  //                         image: base64Image
+  //                     }
+  //                 },
+  //                 { new: true },
+  //                 function(err, updated) {
+  //                     console.log("yes");
+  //                     console.log(updated);
+  //                     if(updated.nModified == 1){
+  //                       User.findOne({ _id: userdata._id , email_verified: true }, function(err, userdat) {
+  //                         if(userdat){
+  //                           res.json({ status: statuscode.SUCCESS, msg: "Image updated Successfully!", data: userdat });
+  //                         }
+  //                       });
+  //                     }
+  //                 }
+  //             );
+  //         } else {
+  //             res.json({ status: statuscode.UNAUTHORIZED, msg: "Sorry! No user exists!", data: "" });
+  //         }
+  //     });
+  // });
 };
 
 
@@ -1020,34 +1366,32 @@ var code1 = req.query.code;
 exports.approveRequest =async (req, res) => {
 
 
-
-
 User.findOne({ _id: req.body.user_id }, function(usererr, userexist) {
- 	if(errors.indexOf(userexist)==-1){
+if(errors.indexOf(userexist)==-1){
       
-      if(req.body.type=='card')
-      {
-         
+	if(req.body.type=='card')
+	{
 
-  Card.findOne({ _id: req.body.id_amt }, function(err, carddata) {
-  if (carddata) {
 
-		stripe.tokens.create(
-		{
-card: {
-		number: carddata.card_no,
-		exp_month:carddata.exp_month,
-		exp_year: carddata.exp_year,
-		cvc: carddata.cvv,
-		},
+						Card.findOne({ _id: req.body.id_amt }, function(err, carddata) {
+						if (carddata) {
 
-		},
-		function(errtoken, token) {
-			 userrequest.findOne({ _id: req.body.reqid}, function(err, request) {
-				 if(errors.indexOf(request)==-1){
-          if(errors.indexOf(token)==-1){
-			  
-			
+						stripe.tokens.create(
+						{
+						card: {
+						number: carddata.card_no,
+						exp_month:carddata.exp_month,
+						exp_year: carddata.exp_year,
+						cvc: carddata.cvv,
+						},
+
+						},
+						function(errtoken, token) {
+						userrequest.findOne({ _id: req.body.reqid}, function(err, request) {
+						if(errors.indexOf(request)==-1){
+						if(errors.indexOf(token)==-1){
+
+
 						stripe.customers.create(
 						{
 						'email' :userexist.email, // customer email id
@@ -1056,252 +1400,351 @@ card: {
 						'address' : {"city" :'khamano', "country" : "+1", "line1" : "khamano , rattom", "line2" : "khamano , ratton", "postal_code" :"12345", "state" : "fategarh sahib"}
 						},
 						function(errcustomer, customer) {
-								if(errors.indexOf(customer)==-1){
+						if(errors.indexOf(customer)==-1){
 
-								stripe.charges.create(
-								{
-								'currency' :'USD',
-								'amount' :  Number(request.amount)*100,
-								'description' : 'Paying to admin',
-								'customer' : customer.id,
+						stripe.charges.create(
+						{
+						'currency' :'USD',
+						'amount' :  Number(request.amount)*100,
+						'description' : 'Paying to admin',
+						'customer' : customer.id,
 
-								},function(errcharge, charge) {
-					                  if(errors.indexOf(charge)==-1){
+						},function(errcharge, charge) {
+						if(errors.indexOf(charge)==-1){
 
-										var add_payment = new Wallet({
-										user_id : request.from_id,
-										transaction_id :charge.id,
-										amount: request.amount,
-										status:1,
+						var add_payment = new Wallet({
+						user_id : request.from_id,
+						transaction_id :charge.id,
+						amount: request.amount,
+						status:1,
 
-										});
-										add_payment.save(function(err,qry){
+						});
+						add_payment.save(function(err,qry){
 
-										if(qry == null){
-													res.json({ status: statuscode.SUCCESS, msg: err });
-										}
-										else{
+						if(qry == null){
+						res.json({ status: statuscode.SUCCESS, msg: err });
+						}
+						else{
 
-													var add_payment1 = new transaction({
-													from_id : req.body.user_id,
-													to_id :request.from_id,
-													amount: request.amount,
-													action:1,
-													status:1,
-													medium:req.body.type,
-													card_id:carddata._id,
-
-
-													});
-													add_payment1.save(function(err,qry){
-
-													});
+						var add_payment1 = new transaction({
+						from_id : req.body.user_id,
+						to_id :request.from_id,
+						amount: request.amount,
+						action:1,
+						status:1,
+						medium:req.body.type,
+						card_id:carddata._id,
 
 
+						});
+						add_payment1.save(function(err,qry){
 
-										Wallet.find({ user_id: req.body.user_id }, function(err, walletdata) {
-										if(walletdata.length>0)
-										{
-										Card.find({ user_id: req.body.user_id }, function(err, mycards) {
-										if(mycards.length>0)
-										{
-												notifications.updateOne({ _id:req.body.notid },{$set: {status:1,read: 1,}},{ new: true },function(err, updated) {
-												if(updated){
+						});
+						var add_payment3 = new transaction({
+						from_id :request.from_id,
+						to_id : req.body.user_id,
+						amount: request.amount,
+						action:2,
+						status:1,
+						medium:req.body.type,
+						card_id:'',
 
-															userrequest.updateOne({ _id:req.body.req_id },{$set: {status:1,}},{ new: true },function(errrequest, updatedrequest) {
+						});
 
-																		if(updatedrequest){
+						add_payment3.save(function(err,qry){
+
+						});
 
 
-																		res.json({ status: statuscode.SUCCESS, msg: "Added to wallet Successfully!" ,data:mycards,wallet:walletdata});
+						var add_notification1 = new notifications({
+						from_id : req.body.user_id,
+						to_id :request.from_id,
+						title: 'Request Approved',
+						description: 'Request Approved by ',
+						linked_url: 'requests',
+						linked_id: req.body.reqid,
+						linked_table: 'userrequest',
+						amount:  request.amount,
+						status: 0,
+						read: 0,
+						created_at : new Date()
+						});
+						add_notification1.save(function(errnoti1,qry1){
 
-																		}
+						});
 
-															});
-												}
+						var add_notification = new notifications({
+						from_id : req.body.user_id,
+						to_id :request.from_id,
+						title: 'Amount Paid',
+						description: 'Amount paid by user ',
+						linked_url: 'requests',
+						linked_id: req.body.reqid,
+						linked_table: 'userrequest',
+						amount:  request.amount,
+						status: 0,
+						read: 0,
+						created_at : new Date()
+						});
+						add_notification.save(function(errnoti,qry){
 
-												});
-										}	
-										});
-										}
-										});
-										}
-										});
-										}else{
+						});
 
-														Wallet.find({ user_id: req.body.user_id }, function(err, walletdata) {			
-														if(walletdata.length>0)
-														{
-														Card.find({ user_id: req.body.user_id }, function(err, mycards) {
-														if(mycards.length>0)
-														{
-														res.json({ status: 500, msg: errcharge ,data:mycards,wallet:walletdata});
-														}	
-														});
-														}
-														});	    
-											}
 
-											});
-										}else
-										{
+							User.findOne({ _id: request.from_id}, function(tousererr, touser) {
 
-													Wallet.find({ user_id: req.body.user_id }, function(err, walletdata) {			
-													if(walletdata.length>0)
-													{
-													Card.find({ user_id: req.body.user_id }, function(err, mycards) {
-													if(mycards.length>0)
-													{
-													res.json({ status: 500, msg: errcustomer ,data:mycards,wallet:walletdata});
-													}	
-													});
-													}
-													});	  
-										}
-										});
-										}else{
 
-													Wallet.find({ user_id: req.body.user_id }, function(err, walletdata) {			
-														if(walletdata.length>0)
-														{
-														Card.find({ user_id: req.body.user_id }, function(err, mycards) {
-														if(mycards.length>0)
-														{
-														res.json({ status: 500, msg: errtoken ,data:mycards,wallet:walletdata});
-														}	
-														});
-														}
-													});
+						if(errors.indexOf(touser.fcm_token)==-1){
+						var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
+						to: touser.fcm_token, 
+						// collapse_key: 'your_collapse_key',
+
+						notification: {
+						title: 'CashApp', 
+						body: 'Money Received' 
+						},
+
+						data: {  //you can send only notisfication or only data(or include both)
+						my_key: touser.paid_id,
+						my_another_key: 'my another value'
+						}
+						};
+
+						fcm.send(message, function(err, response){
+						if (err) {
+						console.log("Something has gone wrong!")
+						} else {
+						console.log("Successfully sent with response: ", response)
+						}
+						}) 
+						}
+
+						});
+
+						Wallet.find({ user_id: req.body.user_id }, function(err, walletdata) {
+						if(walletdata.length>0)
+						{
+						Card.find({ user_id: req.body.user_id }, function(err, mycards) {
+						if(mycards.length>0)
+						{
+						notifications.updateOne({ _id:req.body.notid },{$set: {status:1,read: 1,}},{ new: true },function(err, updated) {
+						if(updated){
+
+						userrequest.updateOne({ _id:req.body.req_id },{$set: {status:1,}},{ new: true },function(errrequest, updatedrequest) {
+
+						if(updatedrequest){
+
+
+						res.json({ status: statuscode.SUCCESS, msg: "Paid Successfully!" ,data:mycards,wallet:walletdata});
 
 						}
-				 }else
-				 {
-					 
-					 
-				 }
-						
-			 });
+
+						});
+						}
+
+						});
+						}	
+						});
+						}
+						});
+						}
+						});
+						}else{
+
+						Wallet.find({ user_id: req.body.user_id }, function(err, walletdata) {			
+						if(walletdata.length>0)
+						{
+						Card.find({ user_id: req.body.user_id }, function(err, mycards) {
+						if(mycards.length>0)
+						{
+						res.json({ status: 500, msg: errcharge ,data:mycards,wallet:walletdata});
+						}	
+						});
+						}
+						});	    
+						}
 
 						});
 						}else
-										{
-										res.json({ staus: statuscode.UNAUTHORIZED, msg: "Error occured", data: "" });
-										}
+						{
+
+						Wallet.find({ user_id: req.body.user_id }, function(err, walletdata) {			
+						if(walletdata.length>0)
+						{
+						Card.find({ user_id: req.body.user_id }, function(err, mycards) {
+						if(mycards.length>0)
+						{
+						res.json({ status: 500, msg: errcustomer ,data:mycards,wallet:walletdata});
+						}	
+						});
+						}
+						});	  
+						}
+						});
+						}else{
+
+						Wallet.find({ user_id: req.body.user_id }, function(err, walletdata) {			
+						if(walletdata.length>0)
+						{
+						Card.find({ user_id: req.body.user_id }, function(err, mycards) {
+						if(mycards.length>0)
+						{
+						res.json({ status: 500, msg: errtoken ,data:mycards,wallet:walletdata});
+						}	
+						});
+						}
+						});
+
+						}
+						}else
+						{
 
 
-});
+						}
+
+						});
+
+						});
+						}else
+						{
+						res.json({ staus: statuscode.UNAUTHORIZED, msg: "Error occured", data: "" });
+						}
 
 
-
-      }else{
-
-  
-		  userrequest.findOne({ _id: req.body.reqid}, function(err, request) {
-			  
-		   User.findOne({ _id: request.from_id }, function(usererr, userexist1) {
-			   
-			   
-			  if(errors.indexOf(userexist1.account_id)>=0){
-				
-					res.json({ staus:402, msg: "User account not connected", data: "" });				
-			  }else
-			  {
-		  	stripe.transfers.create(
-		{
-		
-			amount:  Number(request.amount)*100,
-			currency: 'usd',
-			destination: userexist1.account_id,
-			transfer_group: 'Transfer to user account',
-		
-
-		},
-		function(errtoken, token) {
-			
-			 if(errors.indexOf(token)==-1){
-				var add_payment = new walletbankpayout({
-				user_id : req.body.user_id,
-				transaction_id :userexist1.account_id,
-				amount: request.amount,
-				status:1,
-
-				});
-				add_payment.save(function(err,qry){
-
-				});
-				
-				var add_payment1 = new Wallet({
-				user_id : request.from_id,
-				transaction_id :userexist1.account_id,
-				amount: request.amount,
-				status:1,
-
-				});
-				add_payment1.save(function(err,qry){
-					
-				});
-
-				var add_payment2 = new transaction({
-				from_id : req.body.user_id,
-				to_id :request.from_id,
-				amount: request.amount,
-				action:1,
-				status:1,
-				medium:req.body.type,
-				card_id:'',
-
-				});
-			
-				add_payment2.save(function(err,qry){
-
-				});
-				
-				
-				var add_payment3 = new transaction({
-				from_id :request.from_id,
-				to_id : req.body.user_id,
-				amount: request.amount,
-				action:2,
-				status:1,
-				medium:req.body.type,
-				card_id:'',
-
-				});
-			
-				add_payment3.save(function(err,qry){
-
-				});
-				
-				
-				
-					var add_notification = new notifications({
-										from_id : req.body.user_id,
-										to_id :request.from_id,
-										title: 'Amount Paid',
-										description: 'Amount paid by user ',
-										linked_url: 'requests',
-										linked_id: req.body.reqid,
-										linked_table: 'userrequest',
-										amount:  request.amount,
-										status: 0,
-										read: 0,
-								   	created_at : new Date()
-										});
-										add_notification.save(function(errnoti,qry){
-											
-										});
-				
-				notifications.updateOne({ _id:req.body.notid },{$set: {status:1,read: 1,}},{ new: true },function(err, updated) {
-					
-				});
-				userrequest.updateOne({ _id:req.body.req_id },{$set: {status:1,}},{ new: true },function(errrequest, updatedrequest) {
-
-				});
-				
+						});
 
 
 
-User.findOne({ _id: request.from_id}, function(tousererr, touser) {
+						}else{
+
+
+						userrequest.findOne({ _id: req.body.reqid}, function(err, request) {
+
+						User.findOne({ _id: request.from_id }, function(usererr, userexist1) {
+
+
+						if(errors.indexOf(userexist1.account_id)>=0){
+
+						res.json({ staus:402, msg: "User account not connected", data: "" });				
+						}else
+						{
+						stripe.transfers.create(
+						{
+
+						amount:  Number(request.amount)*100,
+						currency: 'usd',
+						destination: userexist1.account_id,
+						transfer_group: 'Transfer to user account',
+
+
+						},
+						function(errtoken, token) {
+
+						if(errors.indexOf(token)==-1){
+						var add_payment = new walletbankpayout({
+						user_id : req.body.user_id,
+						transaction_id :userexist1.account_id,
+						amount: request.amount,
+						status:1,
+
+						});
+						add_payment.save(function(err,qry){
+
+						});
+
+						var add_payment1 = new Wallet({
+						user_id : request.from_id,
+						transaction_id :userexist1.account_id,
+						amount: request.amount,
+						status:1,
+
+						});
+						add_payment1.save(function(err,qry){
+
+						});
+
+						var add_payment2 = new transaction({
+						from_id : req.body.user_id,
+						to_id :request.from_id,
+						amount: request.amount,
+						action:1,
+						status:1,
+						medium:req.body.type,
+						card_id:'',
+
+						});
+
+						add_payment2.save(function(err,qry){
+
+						});
+
+
+						var add_payment3 = new transaction({
+						from_id :request.from_id,
+						to_id : req.body.user_id,
+						amount: request.amount,
+						action:2,
+						status:1,
+						medium:req.body.type,
+						card_id:'',
+
+						});
+
+						add_payment3.save(function(err,qry){
+
+						});
+
+						var add_notification1 = new notifications({
+						from_id : req.body.user_id,
+						to_id :request.from_id,
+						title: 'Request Approved',
+						description: 'Request Approved by ',
+						linked_url: 'requests',
+						linked_id: req.body.reqid,
+						linked_table: 'userrequest',
+						amount:  request.amount,
+						status: 0,
+						read: 0,
+						created_at : new Date()
+						});
+						add_notification1.save(function(errnoti1,qry1){
+
+						});
+
+						var add_notification = new notifications({
+						from_id : req.body.user_id,
+						to_id :request.from_id,
+						title: 'Amount Paid',
+						description: 'Amount paid by user ',
+						linked_url: 'requests',
+						linked_id: req.body.reqid,
+						linked_table: 'userrequest',
+						amount:  request.amount,
+						status: 0,
+						read: 0,
+						created_at : new Date()
+						});
+						add_notification.save(function(errnoti,qry){
+
+						});
+
+
+
+
+
+
+
+						notifications.updateOne({ _id:req.body.notid },{$set: {status:1,read: 1,}},{ new: true },function(err, updated) {
+
+						});
+						userrequest.updateOne({ _id:req.body.req_id },{$set: {status:1,}},{ new: true },function(errrequest, updatedrequest) {
+
+						});
+
+
+
+
+						User.findOne({ _id: request.from_id}, function(tousererr, touser) {
 
 
 						if(errors.indexOf(touser.fcm_token)==-1){
@@ -1332,27 +1775,27 @@ User.findOne({ _id: request.from_id}, function(tousererr, touser) {
 						});
 
 
-				res.json({ status: statuscode.SUCCESS, msg: "Paid successfully!"});
+						res.json({ status: statuscode.SUCCESS, msg: "Paid successfully!"});
 
-											
-			 }else
-			 {
-				 res.json({ status:500, msg:errtoken});
-			 }
-		});
-		  }
-		  
-	  });
-		  });
-	  
-	
-      } 
 
- 	}else{
+						}else
+						{
+						res.json({ status:500, msg:errtoken});
+						}
+						});
+						}
 
- 		res.json({ status:500,msg:"User not exist" });
+						});
+						});
 
- 	}
+
+						} 
+
+						}else{
+
+						res.json({ status:500,msg:"User not exist" });
+
+						}
  });
 };
 exports.getnotificationcount =async (req, res) => {
@@ -1366,17 +1809,19 @@ exports.rejectRequest =async (req, res) => {
 		 if(errors.indexOf(notification)==-1){
 			notifications.updateOne({ _id:req.body.not_id },{$set: {status:2,read: 1,}},{ new: true },function(err, updated) {
 					if(updated){
+
+						  userrequest.findOne({ _id: req.body.req_id }, function(reqerrr, requests) {
 									userrequest.updateOne({ _id:req.body.req_id },{$set: {status:2,}},{ new: true },function(errrequest, updatedrequest) {
 
 											var add_notification = new notifications({
 										from_id : req.body.user_id,
 										to_id :notification.from_id,
 										title: 'Request Rejected',
-										description: 'Request rejected by user ',
+										description: 'Request rejected by ',
 										linked_url: 'requests',
 										linked_id: req.body.req_id,
 										linked_table: 'userrequest',
-										amount: 0,
+										amount: requests.amount,
 										status: 0,
 										read: 0,
 									 	created_at : new Date()
@@ -1421,6 +1866,7 @@ exports.rejectRequest =async (req, res) => {
 
 
 									});
+								});
 
 						}
 						
@@ -1441,7 +1887,8 @@ exports.rejectRequest =async (req, res) => {
 exports.payAmount =async (req, res) => {
 
 User.findOne({ _id: req.body.user_id }, function(usererr, userexist) {
-	if(errors.indexOf(userexist)==-1){
+if(errors.indexOf(userexist)==-1){
+
 	  if(req.body.type=='card')
       {
 		  Card.findOne({ _id: req.body.id_amt }, function(err, carddata) {
@@ -1508,6 +1955,40 @@ User.findOne({ _id: req.body.user_id }, function(usererr, userexist) {
 
 												});
 
+
+												var add_payment3 = new transaction({
+												from_id :req.body.toid,
+												to_id : req.body.user_id,
+												amount: req.body.amount,
+												action:2,
+												status:1,
+												medium:req.body.type,
+												card_id:carddata._id,
+												});
+
+												add_payment3.save(function(err,qry){
+
+												});
+
+
+												
+								var add_notification = new notifications({
+								from_id : req.body.user_id,
+								to_id :req.body.toid,
+								title: 'Amount Paid',
+								description: 'Amount paid by  ',
+								linked_url: 'requests',
+								linked_id: '',
+								linked_table: 'userrequest',
+								amount:  req.body.amount,
+								status: 0,
+								read: 0,
+		 						created_at : new Date()
+								});
+								add_notification.save(function(errnoti,qry){
+
+								});
+
 												res.json({ status:200 ,msg:'Paid successfully'}); 
 												
 											}else{
@@ -1540,10 +2021,16 @@ User.findOne({ _id: req.body.user_id }, function(usererr, userexist) {
 		  });
 	  }else
 	  {
+
+
 		   User.findOne({ _id: req.body.toid }, function(usererr, userexist1) {
+		   		if(userexist1){
+				console.log(errors.indexOf(userexist1.account_id));
+
 			   if(errors.indexOf(userexist1.account_id)>=0){
 				   res.json({ staus:402, msg: "User account not connected", data: "" });		
-			   }else{
+			   }else
+			   {
 					stripe.transfers.create(
 					{
 
@@ -1557,115 +2044,129 @@ User.findOne({ _id: req.body.user_id }, function(usererr, userexist) {
 					function(errtoken, token) {
 
 					if(errors.indexOf(token)==-1){
-						var add_payment = new walletbankpayout({
-						user_id : req.body.user_id,
-						transaction_id :userexist1.account_id,
-						amount: req.body.amount,
-						status:1,
+								var add_payment = new walletbankpayout({
+								user_id : req.body.user_id,
+								transaction_id :userexist1.account_id,
+								amount: req.body.amount,
+								status:1,
 
-						});
-						add_payment.save(function(err,qry){
+								});
+								add_payment.save(function(err,qry){
 
-						});
+								});
 						
-						var add_payment1 = new Wallet({
-						user_id : req.body.toid,
-						transaction_id :userexist1.account_id,
-						amount: req.body.amount,
-						status:1,
+								var add_payment1 = new Wallet({
+								user_id : req.body.toid,
+								transaction_id :userexist1.account_id,
+								amount: req.body.amount,
+								status:1,
 
-						});
-						add_payment1.save(function(err,qry){
+								});
+								add_payment1.save(function(err,qry){
 
-						});
+								});
 						
-						var add_payment2 = new transaction({
-						from_id : req.body.user_id,
-						to_id :req.body.toid,
-						amount: req.body.amount,
-						action:1,
-						status:1,
-						medium:req.body.type,
-						card_id:'',
+								var add_payment2 = new transaction({
+								from_id : req.body.user_id,
+								to_id :req.body.toid,
+								amount: req.body.amount,
+								action:1,
+								status:1,
+								medium:req.body.type,
+								card_id:'',
 
-						});
+								});
 
-						add_payment2.save(function(err,qry){
+								add_payment2.save(function(err,qry){
 
-						});
+								});
+								
+								var add_payment3 = new transaction({
+								from_id :req.body.toid,
+								to_id : req.body.user_id,
+								amount: req.body.amount,
+								action:2,
+								status:1,
+									medium:req.body.type,
+								card_id:'',
+
+								});
+
+								add_payment3.save(function(err,qry){
+
+								});
+
+								
 						
-						var add_payment3 = new transaction({
-						from_id :req.body.toid,
-						to_id : req.body.user_id,
-						amount: req.body.amount,
-						action:2,
-						status:1,
+								var add_notification = new notifications({
+								from_id : req.body.user_id,
+								to_id :req.body.toid,
+								title: 'Amount Paid',
+								description: 'Amount paid by  ',
+								linked_url: 'requests',
+								linked_id: '',
+								linked_table: 'userrequest',
+								amount:  req.body.amount,
+								status: 0,
+								read: 0,
+		 						created_at : new Date()
+								});
+								add_notification.save(function(errnoti,qry){
 
-						});
+								});
 
-						add_payment3.save(function(err,qry){
-
-						});
-						
-						var add_notification = new notifications({
-						from_id : req.body.user_id,
-						to_id :req.body.toid,
-						title: 'Amount Paid',
-						description: 'Amount paid by user ',
-						linked_url: 'requests',
-						linked_id: '',
-						linked_table: 'userrequest',
-						amount:  req.body.amount,
-						status: 0,
-						read: 0,
- 						created_at : new Date()
-						});
-						add_notification.save(function(errnoti,qry){
-
-						});
-						
-	User.findOne({ _id: req.body.toid}, function(tousererr, touser) {
+								User.findOne({ _id: req.body.toid}, function(tousererr, touser) {
 
 
-						if(errors.indexOf(touser.fcm_token)==-1){
-						var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
-						to: touser.fcm_token, 
-						// collapse_key: 'your_collapse_key',
+								if(errors.indexOf(touser.fcm_token)==-1){
+								var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
+								to: touser.fcm_token, 
+								// collapse_key: 'your_collapse_key',
 
-						notification: {
-						title: 'CashApp', 
-						body: 'Money Received' 
-						},
+								notification: {
+								title: 'CashApp', 
+								body: 'Money Received' 
+								},
 
-						data: {  //you can send only notisfication or only data(or include both)
-						my_key: touser.paid_id,
-						my_another_key: 'my another value'
-						}
-						};
+								data: {  //you can send only notisfication or only data(or include both)
+								my_key: touser.paid_id,
+								my_another_key: 'my another value'
+								}
+								};
 
-						fcm.send(message, function(err, response){
-						if (err) {
-						console.log("Something has gone wrong!")
-						} else {
-						console.log("Successfully sent with response: ", response)
-						}
-						}) 
-						}
+								fcm.send(message, function(err, response){
+								if (err) {
+								console.log("Something has gone wrong!")
+								} else {
+								console.log("Successfully sent with response: ", response)
+								}
+								}) 
+								}
 
-						});
+								});
 
 						res.json({ status: statuscode.SUCCESS, msg: "Paid successfully!"});
+					}else{
+
+res.json({ status:500, msg: errtoken.raw.message});
+
 					}
 					});
 			   }
+			}else{
+
+				 res.json({ status:500 ,msg:'User not found'}); 
+			}
 		   });
-		 
+ 
 	  }
-	}else{
-	res.json({ status:500 ,msg:'User not found'}); 	
-	}
+}else
+{
+res.json({ status:500 ,msg:'User not found'}); 	
+}
 	
 });
+
 
 };
 exports.sendrequest =async (req, res) => {
@@ -1724,6 +2225,7 @@ exports.sendrequest =async (req, res) => {
 
 																fcm.send(message, function(err, response){
 																if (err) {
+																	console.log(err);
 																console.log("Something has gone wrong!")
 																} else {
 																console.log("Successfully sent with response: ", response)
@@ -1736,7 +2238,7 @@ exports.sendrequest =async (req, res) => {
 
 
 
-													res.json({ status: 200, msg: "Request send Successfully" });
+													res.json({ status: 200, msg: "Request sent Successfully" });
 													}
 										});
 									}
@@ -1792,6 +2294,39 @@ exports.sendmoneytobank = async (req, res) => {
 									res.json({ status: 500, msg: err });
 									}
 									else{
+
+
+
+User.findOne({ _id: req.body.user_id}, function(tousererr, touser) {
+
+
+						if(errors.indexOf(touser.fcm_token)==-1){
+						var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
+						to: touser.fcm_token, 
+						// collapse_key: 'your_collapse_key',
+
+						notification: {
+						title: 'CashApp', 
+						body: 'Money Transferred to Bank ' 
+						},
+
+						data: {  //you can send only notisfication or only data(or include both)
+						my_key: touser.money_bank,
+						my_another_key: 'my another value'
+						}
+						};
+
+						fcm.send(message, function(err, response){
+						if (err) {
+						console.log("Something has gone wrong!")
+						} else {
+						console.log("Successfully sent with response: ", response)
+						}
+						}) 
+						}
+
+						});
+
 
 
 									Wallet.find({ user_id: req.body.user_id }, function(err, walletdata) {
@@ -1853,7 +2388,7 @@ Card.findOne({ _id: req.body.cardid }, function(err, carddata) {
 						{
 						'email' :userexist.email, // customer email id
 						'source' : token.id, // stripe token generated by stripe.js
-						'name' : 'harinder singh',
+						'name' : userexist.first_name,
 						'address' : {"city" :'khamano', "country" : "+1", "line1" : "khamano , rattom", "line2" : "khamano , ratton", "postal_code" :"12345", "state" : "fategarh sahib"}
 						},
 						function(errcustomer, customer) {
@@ -1872,7 +2407,7 @@ Card.findOne({ _id: req.body.cardid }, function(err, carddata) {
 										var add_payment = new Wallet({
 										user_id : req.body.user_id,
 										transaction_id :charge.id,
-										amount: req.body.amount,
+										amount: req.body.withoutfee,
 										status:1,
 
 										});
@@ -1888,6 +2423,37 @@ Card.findOne({ _id: req.body.cardid }, function(err, carddata) {
 										Card.find({ user_id: req.body.user_id }, function(err, mycards) {
 										if(mycards.length>0)
 										{
+
+					User.findOne({ _id: req.body.user_id}, function(tousererr, touser) {
+
+
+						if(errors.indexOf(touser.fcm_token)==-1){
+						var message = { //this may vary according to the message type (single recipient, multicast, topic, et cetera)
+						to: touser.fcm_token, 
+						// collapse_key: 'your_collapse_key',
+
+						notification: {
+						title: 'CashApp', 
+						body: 'Money Added to Wallet' 
+						},
+
+						data: {  //you can send only notisfication or only data(or include both)
+						my_key: touser.money_wallet,
+						my_another_key: 'my another value'
+						}
+						};
+
+						fcm.send(message, function(err, response){
+						if (err) {
+						console.log("Something has gone wrong!")
+						} else {
+						console.log("Successfully sent with response: ", response)
+						}
+						}) 
+						}
+
+						});
+
 										res.json({ status: statuscode.SUCCESS, msg: "Added to wallet Successfully!" ,data:mycards,wallet:walletdata});
 										}	
 										});
@@ -1977,19 +2543,17 @@ exports.getmycards = async (req, res) => {
  //    new_favourite.save(function(err,qry){
 
  //    });
-		Card.find({ user_id: req.body.user_id }, function(err, userdata) {
+		Card.find({ user_id: req.body.user_id },null,{sort: {'created_at': -1}}, function(err, userdata) {
 			if (userdata.length>0) {
-				Wallet.find({ user_id: req.body.user_id }, function(err, walletdata) {
+				Wallet.find({ user_id: req.body.user_id },null,{sort: {'created_at': -1}}, function(err, walletdata) {
 						if(walletdata.length>0){
-						walletbankpayout.find({ user_id: req.body.user_id }, function(err, walletpayout) {
+						walletbankpayout.find({ user_id: req.body.user_id },null,{sort: {'created_at': -1}}, function(err, walletpayout) {
 						if(walletpayout.length>0){
 						res.json({ status: statuscode.SUCCESS, msg: "Fetched Successfully!", data: userdata , wallet:walletdata ,walletpayout:walletpayout});
 					}else
 					{
-res.json({ status: statuscode.SUCCESS, msg: "Fetched Successfully!", data: userdata , wallet:walletdata,walletpayout:[] });
+						res.json({ status: statuscode.SUCCESS, msg: "Fetched Successfully!", data: userdata , wallet:walletdata,walletpayout:[] });
 					}
-
-
 					});
 						}else
 						{
@@ -2000,10 +2564,10 @@ res.json({ status: statuscode.SUCCESS, msg: "Fetched Successfully!", data: userd
 			});
 			} else {
 
-					Wallet.find({ user_id: req.body.user_id }, function(err, walletdata) {
+					Wallet.find({ user_id: req.body.user_id },null,{sort: {'created_at': -1}}, function(err, walletdata) {
 						
 
-							walletbankpayout.find({ user_id: req.body.user_id }, function(err, walletpayout) {
+							walletbankpayout.find({ user_id: req.body.user_id },null,{sort: {'created_at': -1}}, function(err, walletpayout) {
 				res.json({ status: statuscode.SUCCESS, msg: "Cards not exist", data: "",walletpayout:walletpayout,wallet:walletdata });
 
 			});
@@ -2127,6 +2691,7 @@ exports.updateProfile = async ({ body }, res) => {
             $set: {
               first_name: body.firstName,
               last_name: body.lastName,
+              username:body.username,
               phone: body.phone,
               country: body.country,
               state: body.state,

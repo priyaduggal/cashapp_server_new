@@ -12,9 +12,13 @@ mongoose.Promise = global.Promise;
 // mongoose.connect('mongodb://localhost/'); // live
 mongoose.connect("mongodb://localhost/cash", { useNewUrlParser: true, useUnifiedTopology: true }); // local
 var path = __dirname;
+
+
+console.log('dsaddsdsadas',__dirname);
 // app.use("/images", express.static(path[0] + "/images"));
 
 
+app.use('/images/profile', express.static(__dirname + '/images/profile'));
 app.use(bodyParser.json({
   limit: '50mb'
 }));

@@ -39,6 +39,9 @@ app.route("/editcard").post(users.editcard);
 app.route("/deletecard").post(users.deletecard);
 app.route("/contactAdmin").post(users.contactAdmin);
 app.route("/setnotification").post(users.setnotification);
+app.route("/getByUserActid").post(users.getByUserActid);
+app.route("/shareqr").post(users.shareqr);
+app.route("/allusersphone").post(users.allusersphone);
 
 	// var category = require("../controllers/CategoriesCtrl");
 
@@ -61,6 +64,28 @@ app.route("/setnotification").post(users.setnotification);
 	app.route("/usercreds").get(admin.usercreds);
 	app.route("/getByAdminId").post(admin.getByAdminId);
 	app.route("/matcholdPass").post(admin.matcholdPass);
+	app.route("/recent_users").post(admin.recent_users);
+	app.route("/admin_dashboard").post(admin.admin_dashboard);
+	app.route("/check_admin_token").post(admin.check_admin_token);
+	app.route("/getAdminDetails").post(admin.getAdminDetails);
+	app.route("/getadminnotifications").post(admin.getadminnotifications);
+	app.route("/sendtransactions").post(admin.sendtransactions);
+	app.route("/receivetransactions").post(admin.receivetransactions);
+	app.route("/updateAdminDetails").post(admin.updateAdminDetails);
+	app.route("/ChangeStatusUser").post(admin.ChangeStatusUser);
+	app.route("/transactiondetails").post(admin.transactiondetails);
+	app.route("/deletetransaction").post(admin.deletetransaction);
+	app.route("/user_stats").post(admin.user_stats1);
+	app.route("/user_stats2").post(admin.user_stats2);
+	app.route("/user_stats3").post(admin.user_stats3);
+	app.route("/trans_stats").post(admin.trans_stats);
+	app.route("/stripe_details").post(admin.stripe_details);
+	app.route("/update_stripe").post(admin.update_stripe);
+	app.route("/sumtransactions").post(admin.sumtransactions);
+	app.route("/viewuser").post(admin.viewuser);
+	app.route("/alluserswithproof").post(admin.alluserswithproof);
+	app.route("/idproofstatus").post(admin.idproofstatus);
+	
 
 	
 	// app.route("/changePassword").post(admin.changePassword);

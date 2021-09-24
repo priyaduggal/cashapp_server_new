@@ -11,10 +11,14 @@ var userSchema = new Schema({
     type: String
   },
   phone: {
-    type: Number,
+    type: String,
     default: ""
   },
   wallet: {
+    type: String,
+    default: ""
+  },
+   username: {
     type: String,
     default: ""
   },
@@ -78,6 +82,10 @@ default: ""
     account_id: {
     type: String,
     default: null
+  },
+  id_proof_status:{
+type: Number,
+  default: "0"
   },
   id_proof:{
  type: String,
@@ -170,7 +178,11 @@ var cardSchema=new Schema({
   cvv:{
     type: String,
     default: ""
-  }
+  },
+   created_at: {
+      type: Date,
+      default : new Date()
+    }
 
 });
 
@@ -322,6 +334,50 @@ var TransactionSchema=new Schema({
 
 });
 
+
+var StripesettingsSchema=new Schema({
+   mode: {
+    type: String,
+       default: null
+  },
+  test_pub_key: {
+    type: String,   default: null
+  },
+  test_secret_key: {
+    type: String,   default: null
+  },
+   live_secret_key: {
+    type: String,   default: null
+  },
+   live_pub_key: {
+    type: String,   default: null
+  },
+  created_at: {
+      type: Date,
+      default : new Date()
+    }
+
+});
+
+
+
+var SharedqrcodeSchema=new Schema({
+   from_id: {
+    type: String,
+       default: null
+  },
+  to_id: {
+    type: String,   default: null
+  },
+  created_at: {
+      type: Date,
+      default : new Date()
+    }
+
+});
+
+
+
 module.exports = mongoose.model("user", userSchema);
 module.exports = mongoose.model("card", cardSchema);
 module.exports = mongoose.model("wallet", WalletSchema);
@@ -329,3 +385,5 @@ module.exports = mongoose.model("walletbankpayout", WalletbankpayoutSchema);
 module.exports = mongoose.model("userrequest", UserrequestSchema);
 module.exports = mongoose.model("notifications", NotificationsSchema);
 module.exports = mongoose.model("transaction", TransactionSchema);
+module.exports = mongoose.model("stripesettings", StripesettingsSchema);
+module.exports = mongoose.model("sharedqrcode", SharedqrcodeSchema);
